@@ -66,8 +66,13 @@
             gap: 10px;
         }
 
-        .view-section { display: none; }
-        .view-section.active { display: block; }
+        /* View Switching Core Classes */
+        .view-section { 
+            display: none !important; 
+        }
+        .view-section.active-view { 
+            display: block !important; 
+        }
 
         /* Dashboard Grid */
         .dashboard-grid {
@@ -141,29 +146,33 @@
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.7 Stable</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.8 Core-Fix</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
-    <!-- 🧭 TOP ACCESS BAR -->
+    <!-- 🧭 TOP ACCESS CONTROL BAR -->
     <div class="role-nav">
         <div>
             <span style="font-weight: bold;">Current View: </span>
             <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color); font-weight: bold;">🛒 CASHIER VIEW</span>
         </div>
+        
+        <!-- Login Form Wrapper Elements -->
         <div id="login-controls" style="display: flex; gap: 10px; align-items: center;">
             <input type="password" id="owner-pin-input" placeholder="Enter Owner PIN (1234)" style="width: 180px; padding: 8px;">
             <button class="btn" onclick="checkOwnerLogin()">Go to Owner Mode</button>
         </div>
-        <div id="logout-controls" style="display: none;">
+        
+        <!-- Logout Button Elements -->
+        <div id="logout-controls" style="display: none; gap: 10px; align-items: center;">
             <button class="btn btn-danger" onclick="returnToCashier()">🔒 Lock back to Cashier</button>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 🛒 CASHIER VIEW: BILLING INTERFACE ONLY     -->
+    <!-- 🛒 CASHIER VIEW SECTION                    -->
     <!-- ========================================== -->
-    <div id="cashier-view" class="view-section active">
+    <div id="cashier-view" class="view-section active-view">
         <h2>🧾 Cashier Billing Desk</h2>
         <div class="billing-workspace">
             
@@ -214,7 +223,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 👑 OWNER VIEW: DASHBOARD, CATALOGUE & DATA -->
+    <!-- 👑 OWNER VIEW SECTION                      -->
     <!-- ========================================== -->
     <div id="owner-view" class="view-section">
         
@@ -317,21 +326,22 @@
     let totalRevenue = 0;
     let todaySales = 0;
 
-    // Run setup immediately on window load
     window.onload = function() {
         document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
         renderProductLists();
     };
 
-    // --- ACCESS BAR CONTROL ---
+    // --- ACCESSIBLE STABLE REDIRECTION CONTROLLERS ---
     function checkOwnerLogin() {
         const inputPin = document.getElementById('owner-pin-input').value.trim();
         if (inputPin === CORRECT_PIN) {
-            document.getElementById('cashier-view').style.display = 'none';
-            document.getElementById('owner-view').style.display = 'block';
+            // Swap display classes securely
+            document.getElementById('cashier-view').classList.remove('active-view');
+            document.getElementById('owner-view').classList.add('active-view');
             
+            // Adjust layouts
             document.getElementById('login-controls').style.display = 'none';
-            document.getElementById('logout-controls').style.display = 'block';
+            document.getElementById('logout-controls').style.display = 'flex';
             
             const badge = document.getElementById('current-role-badge');
             badge.innerText = "👑 OWNER ADMIN VIEW";
@@ -344,8 +354,8 @@
     }
 
     function returnToCashier() {
-        document.getElementById('owner-view').style.display = 'none';
-        document.getElementById('cashier-view').style.display = 'block';
+        document.getElementById('owner-view').classList.remove('active-view');
+        document.getElementById('cashier-view').classList.add('active-view');
         
         document.getElementById('login-controls').style.display = 'flex';
         document.getElementById('logout-controls').style.display = 'none';
@@ -354,9 +364,10 @@
         const badge = document.getElementById('current-role-badge');
         badge.innerText = "🛒 CASHIER VIEW";
         badge.style.color = "var(--accent-color)";
+        renderProductLists();
     }
 
-    // --- INVENTORY MANAGEMENT FUNCTIONS ---
+    // --- CATALOGUE CORE ---
     function renderProductLists() {
         const cashierContainer = document.getElementById('cashier-product-list');
         if(cashierContainer) {
@@ -407,7 +418,7 @@
             item.name = n; 
             item.price = p; 
             renderProductLists(); 
-            alert("Updated!"); 
+            alert("Updated successfully!"); 
         }
     }
 
@@ -416,7 +427,7 @@
         renderProductLists();
     }
 
-    // --- BILLING DESK LOGIC ---
+    // --- BILLING ENGINE ---
     function lookupCustomer() {
         let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
         if (phone.length === 10) phone = '91' + phone;
@@ -472,7 +483,6 @@
         const msg = `Hello ${name}, your invoice #${billId} is ready. Total: ₹${total}. Items: ${itemsSummary.join(', ')}`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 
-        // Clear Form
         document.getElementById('bill-phone').value = '';
         document.getElementById('bill-name').value = '';
         document.getElementById('bill-area').value = '';
@@ -482,10 +492,4 @@
     }
 
     function sendPromoWhatsApp() {
-        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
-        const name = document.getElementById('bill-name').value.trim();
-        if(!phone || !name) return alert("Provide client data first.");
-        if (phone.length === 10) phone = '91' + phone;
-
-        const msg = `Hi ${name}! Use your registered phone number ${phone} to get 10% off your next checkout!`;
-        window.open(`https:
+        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, 
