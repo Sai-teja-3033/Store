@@ -124,7 +124,7 @@
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v2.1 Qty-Update</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v2.2 Production</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
@@ -135,13 +135,13 @@
             <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color); font-weight: bold;">🛒 CASHIER VIEW</span>
         </div>
         
-        <!-- Login Form -->
+        <!-- Login Form Wrapper Elements -->
         <form id="login-form" onsubmit="checkOwnerLogin(event);" style="display: flex; gap: 10px; align-items: center; margin: 0;">
             <input type="password" id="owner-pin-input" placeholder="Enter Owner PIN (1234)" style="width: 180px; padding: 8px;" required>
             <button type="submit" class="btn">Go to Owner Mode</button>
         </form>
         
-        <!-- Logout Bar -->
+        <!-- Logout Button Layout Elements -->
         <div id="logout-controls" style="display: none;">
             <button type="button" class="btn btn-danger" onclick="returnToCashier()">🔒 Lock back to Cashier</button>
         </div>
@@ -275,7 +275,7 @@
     let totalRevenue = 0;
     let todaySales = 0;
 
-    // Load initial structures
+    // Load initial structures securely
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
     renderProductLists();
 
@@ -314,7 +314,7 @@
         renderProductLists();
     }
 
-    // --- CATALOGUE CORE MANAGER ---
+    // --- CATALOGUE MANAGER ENGINE ---
     function renderProductLists() {
         const cashierContainer = document.getElementById('cashier-product-list');
         if(cashierContainer) {
@@ -375,6 +375,11 @@
         }
     }
 
+    function deleteProduct(id) {
+        productCatalogue = productCatalogue.filter(x => x.id !== id);
+        renderProductLists();
+    }
+
     // --- BILLING MECHANICS ---
     function lookupCustomer() {
         let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
@@ -424,48 +429,39 @@
         productCatalogue.forEach((prod, index) => {
             const checkBox = document.getElementById(`prod-check-${index}`);
             const qtyInput = document.getElementById(`prod-qty-${index}`);
-            const noteInput = document.getElementById(`prod-note-${index}`);
             
             if (checkBox && checkBox.checked) {
                 let qty = parseInt(qtyInput.value) || 1;
                 let itemPrice = parseFloat(checkBox.getAttribute('data-price'));
-                let itemTotal = itemPrice * qty;
-                let note = noteInput ? noteInput.value.trim() : "";
                 
-                itemsHistorySummary.push(`${prod.name} (x${qty}) ${note ? '['+note+']' : ''}`);
-                
-                // Construct specific format lines for WhatsApp receipt text block
+                itemsHistorySummary.push(`${prod.name} (x${qty})`);
                 txtMessageItems += `\n- ${prod.name} (Qty: ${qty}) Amt: ₹${itemPrice.toFixed(2)}`;
             }
         });
 
-        // 1. Update Owner Dashboard Data Metrics
         totalRevenue += total;
         todaySales += total;
         document.getElementById('dash-revenue').innerText = `₹${totalRevenue.toFixed(2)}`;
         document.getElementById('dash-today-sales').innerText = `₹${todaySales.toFixed(2)}`;
 
-        // 2. Build row inside secure Owner history ledger
         const tbody = document.getElementById('history-table-body');
         if(tbody) {
             tbody.innerHTML = `<tr><td><strong>${billId}</strong></td><td>${new Date().toLocaleTimeString()}</td><td>${name} (${phone})</td><td>${itemsHistorySummary.join(', ')}</td><td>₹${total.toFixed(2)}</td></tr>` + tbody.innerHTML;
         }
 
-        // 3. Fire up Custom tailored WhatsApp message (NO Bill ID)
+        // WhatsApp Custom formatting per instructions (No bill number)
         const msg = `Thank you for visiting! Here is the bill:\n${txtMessageItems}\n\nTotal Amt: ₹${total.toFixed(2)}`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 
-        // 4. Reset checkout workbench layouts
+        // Clear workbench
         document.getElementById('bill-phone').value = '';
         document.getElementById('bill-name').value = '';
         document.getElementById('bill-area').value = '';
         productCatalogue.forEach((prod, index) => {
             const checkBox = document.getElementById(`prod-check-${index}`);
             const qtyInput = document.getElementById(`prod-qty-${index}`);
-            const noteInput = document.getElementById(`prod-note-${index}`);
             if(checkBox) checkBox.checked = false;
             if(qtyInput) qtyInput.value = "1";
-            if(noteInput) noteInput.value = "";
         });
         document.getElementById('bill-total').innerText = "₹0.00";
     }
@@ -473,4 +469,12 @@
     function sendPromoWhatsApp() {
         let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
         const name = document.getElementById('bill-name').value.trim();
-        if(!phone || !name) return alert("
+        if(!phone || !name) return alert("Provide client data first.");
+        if (phone.length === 10) phone = '91' + phone;
+
+        const msg = `Hi ${name}! Thank you for choosing us. Use your registered phone number ${phone} to get 10% off your next checkout!`;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+</script>
+</body>
+</html>
