@@ -133,13 +133,29 @@
         .inline-form {
             display: flex; gap: 10px; margin-bottom: 15px;
         }
+
+        /* 🔐 POPUP LOCK OVERLAY SCREEN */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        .modal-box {
+            background: var(--card-bg);
+            padding: 30px; border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center; max-width: 320px; width: 100%;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.4 Catalogue Control</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.5 Premium</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
@@ -150,7 +166,7 @@
             <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color);">🛒 Cashier Desk</span>
         </div>
         <div>
-            <button class="btn" id="toggle-role-btn" onclick="requestOwnerAccess()">🔑 Switch to Owner Mode</button>
+            <button class="btn" id="toggle-role-btn" onclick="handleRoleToggleClick()">🔑 Switch to Owner Mode</button>
         </div>
     </div>
 
@@ -180,7 +196,6 @@
                 </div>
 
                 <h3>Select Products</h3>
-                <!-- Dynamic product list filled by JavaScript -->
                 <div class="product-select-list" id="cashier-product-list"></div>
 
                 <div class="form-group">
@@ -258,7 +273,7 @@
                         </tr>
                     </thead>
                     <tbody id="catalogue-table-body">
-                        <!-- Filled by JavaScript -->
+                        <!-- Populated dynamically -->
                     </tbody>
                 </table>
             </div>
@@ -306,6 +321,19 @@
 
 </div>
 
+<!-- 🔐 MODERN SECURITY MODAL OVERLAY -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+        <h3 style="margin-bottom:10px;">🔐 Owner Verification</h3>
+        <p style="font-size:0.85rem; color:#aaa; margin-bottom:20px;">Please enter your master passcode pin to access the system dashboards.</p>
+        <div class="form-group">
+            <input type="password" id="ownerPasscodeField" placeholder="Enter PIN (Default: 1234)" style="text-align:center; font-size:1.2rem; letter-spacing:4px;">
+        </div>
+        <button class="btn btn-success" style="width:100%; margin-bottom:10px;" onclick="verifyOwnerPassword()">Verify Access</button>
+        <button class="btn btn-danger" style="width:100%; background:#444;" onclick="closeLoginModal()">Cancel</button>
+    </div>
+</div>
+
 <script>
     // System Configurations
     let currentRole = "cashier";
@@ -331,33 +359,40 @@
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
     renderProductLists();
 
+    // Attach Enter Key event to login box
+    document.getElementById('ownerPasscodeField').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') verifyOwnerPassword();
+    });
+
     // --- CATALOGUE CORE FUNCTIONS ---
     function renderProductLists() {
-        // 1. Render for Cashier Desk
         const cashierContainer = document.getElementById('cashier-product-list');
-        cashierContainer.innerHTML = '';
-        productCatalogue.forEach(prod => {
-            cashierContainer.innerHTML += `
-                <div class="product-item">
-                    <label><input type="checkbox" value="${prod.name}" data-price="${prod.price}" onchange="calculateTotal()"> ${prod.name} (₹${prod.price.toLocaleString('en-IN')})</label>
-                    <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
-                </div>`;
-        });
+        if(cashierContainer) {
+            cashierContainer.innerHTML = '';
+            productCatalogue.forEach(prod => {
+                cashierContainer.innerHTML += `
+                    <div class="product-item">
+                        <label><input type="checkbox" value="${prod.name}" data-price="${prod.price}" onchange="calculateTotal()"> ${prod.name} (₹${prod.price.toLocaleString('en-IN')})</label>
+                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
+                    </div>`;
+            });
+        }
 
-        // 2. Render for Owner Admin View
         const catalogueContainer = document.getElementById('catalogue-table-body');
-        catalogueContainer.innerHTML = '';
-        productCatalogue.forEach(prod => {
-            catalogueContainer.innerHTML += `
-                <tr>
-                    <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="background:#2d2d2d; border:1px solid #444;"></td>
-                    <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="background:#2d2d2d; border:1px solid #444; width:120px;"></td>
-                    <td>
-                        <button class="btn btn-success" style="padding: 5px 10px; font-size:0.85rem;" onclick="updateProduct(${prod.id})">Save Changes</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px; font-size:0.85rem;" onclick="deleteProduct(${prod.id})">Delete</button>
-                    </td>
-                </tr>`;
-        });
+        if(catalogueContainer) {
+            catalogueContainer.innerHTML = '';
+            productCatalogue.forEach(prod => {
+                catalogueContainer.innerHTML += `
+                    <tr>
+                        <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="background:#2d2d2d; border:1px solid #444;"></td>
+                        <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="background:#2d2d2d; border:1px solid #444; width:120px;"></td>
+                        <td>
+                            <button class="btn btn-success" style="padding: 5px 10px; font-size:0.85rem;" onclick="updateProduct(${prod.id})">Save Changes</button>
+                            <button class="btn btn-danger" style="padding: 5px 10px; font-size:0.85rem;" onclick="deleteProduct(${prod.id})">Delete</button>
+                        </td>
+                    </tr>`;
+            });
+        }
     }
 
     function addNewProduct() {
@@ -394,7 +429,7 @@
             product.name = updatedName;
             product.price = updatedPrice;
             renderProductLists();
-            calculateTotal(); // recalculate live total if cashier has boxes checked
+            calculateTotal();
             alert("✨ Product details updated successfully!");
         }
     }
@@ -407,23 +442,15 @@
         }
     }
 
-    // --- SECURITY & VIEW CONTROLLER ---
-    function requestOwnerAccess() {
+    // --- NEW SECURE MODAL CONTROLLERS ---
+    function handleRoleToggleClick() {
         if (currentRole === "cashier") {
-            const password = prompt("🔐 Enter Owner Security Passcode:");
-            if (password === OWNER_PASSWORD) {
-                currentRole = "owner";
-                document.getElementById('cashier-view').classList.remove('active');
-                document.getElementById('owner-view').classList.add('active');
-                document.getElementById('current-role-badge').innerText = "👑 Owner Management Mode";
-                document.getElementById('current-role-badge').style.color = "#ffc107";
-                document.getElementById('toggle-role-btn').innerText = "🔒 Lock to Cashier View";
-                document.getElementById('toggle-role-btn').className = "btn btn-danger";
-                renderProductLists(); // ensure catalog displays sync instantly
-            } else {
-                alert("❌ Incorrect Passcode. Access Denied.");
-            }
+            // Display modern popup overlay screen instead of buggy browser prompt
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('ownerPasscodeField').value = '';
+            document.getElementById('ownerPasscodeField').focus();
         } else {
+            // Instantly transition back to Cashier view mode safely
             currentRole = "cashier";
             document.getElementById('owner-view').classList.remove('active');
             document.getElementById('cashier-view').classList.add('active');
@@ -432,6 +459,27 @@
             document.getElementById('toggle-role-btn').innerText = "🔑 Switch to Owner Mode";
             document.getElementById('toggle-role-btn').className = "btn";
         }
+    }
+
+    function verifyOwnerPassword() {
+        const enteredPin = document.getElementById('ownerPasscodeField').value.trim();
+        if (enteredPin === OWNER_PASSWORD) {
+            currentRole = "owner";
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('cashier-view').classList.remove('active');
+            document.getElementById('owner-view').classList.add('active');
+            document.getElementById('current-role-badge').innerText = "👑 Owner Management Mode";
+            document.getElementById('current-role-badge').style.color = "#ffc107";
+            document.getElementById('toggle-role-btn').innerText = "🔒 Lock to Cashier View";
+            document.getElementById('toggle-role-btn').className = "btn btn-danger";
+            renderProductLists();
+        } else {
+            alert("❌ Incorrect Passcode Pin. Access Denied.");
+        }
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
     }
 
     // --- CASHIER INTERFACE ENGINE ---
@@ -445,57 +493,4 @@
         const statusText = document.getElementById('customer-status');
         const nameInput = document.getElementById('bill-name');
         const areaInput = document.getElementById('bill-area');
-        const couponBox = document.getElementById('coupon-status-box');
-
-        if (mockCustomers[phone]) {
-            const customer = mockCustomers[phone];
-            statusText.innerText = `✨ Returning Customer Verified!`;
-            nameInput.value = customer.name;
-            areaInput.value = customer.area;
-            couponBox.innerHTML = `<strong>Coupon Status:</strong> ${customer.couponStatus}`;
-        } else {
-            statusText.innerText = phone.length > 5 ? "🆕 Registering New Customer Profile" : "";
-            couponBox.innerHTML = "No active coupon mapping for entry.";
-        }
-        calculateTotal();
-    }
-
-    function calculateTotal() {
-        let total = 0;
-        const checkboxes = document.querySelectorAll('#cashier-product-list input[type="checkbox"]');
-        
-        checkboxes.forEach(box => {
-            if (box.checked) {
-                total += parseFloat(box.getAttribute('data-price'));
-            }
-        });
-
-        let phone = document.getElementById('bill-phone').value.trim();
-        phone = phone.replace(/[^0-9]/g, ''); 
-        if (phone.length === 10) {
-            phone = '91' + phone;
-        }
-        
-        const couponEntered = document.getElementById('bill-coupon').value.trim();
-        
-        if (couponEntered && (couponEntered === phone || '91'+couponEntered === phone) && mockCustomers[phone] && mockCustomers[phone].couponStatus === "Sent") {
-            total = total * 0.9; 
-        }
-
-        document.getElementById('bill-total').innerText = `₹${total.toFixed(2)}`;
-        return total;
-    }
-
-    function saveAndSendBill() {
-        let phone = document.getElementById('bill-phone').value.trim();
-        const name = document.getElementById('bill-name').value.trim();
-        const area = document.getElementById('bill-area').value.trim();
-        const total = calculateTotal();
-
-        if (!phone || !name || total === 0) {
-            alert("⚠️ Please verify client data entries and select items.");
-            return;
-        }
-
-        phone = phone.replace(/[^0-9]/g, ''); 
-      
+        const couponBox = document.getElemen
