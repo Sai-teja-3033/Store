@@ -141,11 +141,11 @@
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.6 Fix</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.7 Stable</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
-    <!-- 🧭 SIMPLE INPUT BAR FOR SIGNIN -->
+    <!-- 🧭 TOP ACCESS BAR -->
     <div class="role-nav">
         <div>
             <span style="font-weight: bold;">Current View: </span>
@@ -212,7 +212,6 @@
 
         </div>
     </div>
-
 
     <!-- ========================================== -->
     <!-- 👑 OWNER VIEW: DASHBOARD, CATALOGUE & DATA -->
@@ -318,22 +317,22 @@
     let totalRevenue = 0;
     let todaySales = 0;
 
-    document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
-    renderProductLists();
+    // Run setup immediately on window load
+    window.onload = function() {
+        document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
+        renderProductLists();
+    };
 
-    // --- SIMPLE LOGIN CHECK ---
+    // --- ACCESS BAR CONTROL ---
     function checkOwnerLogin() {
         const inputPin = document.getElementById('owner-pin-input').value.trim();
         if (inputPin === CORRECT_PIN) {
-            // Hide cashier view, show owner view
             document.getElementById('cashier-view').style.display = 'none';
             document.getElementById('owner-view').style.display = 'block';
             
-            // Adjust login bar display
             document.getElementById('login-controls').style.display = 'none';
             document.getElementById('logout-controls').style.display = 'block';
             
-            // Set badge
             const badge = document.getElementById('current-role-badge');
             badge.innerText = "👑 OWNER ADMIN VIEW";
             badge.style.color = "#ffc107";
@@ -357,7 +356,7 @@
         badge.style.color = "var(--accent-color)";
     }
 
-    // --- CATALOGUE RENDER SYSTEM ---
+    // --- INVENTORY MANAGEMENT FUNCTIONS ---
     function renderProductLists() {
         const cashierContainer = document.getElementById('cashier-product-list');
         if(cashierContainer) {
@@ -391,7 +390,7 @@
     function addNewProduct() {
         const name = document.getElementById('new-prod-name').value.trim();
         const price = parseFloat(document.getElementById('new-prod-price').value);
-        if (!name || isNaN(price)) return alert("Enter item details");
+        if (!name || isNaN(price)) return alert("Enter valid item details");
 
         const newId = Date.now();
         productCatalogue.push({ id: newId, name: name, price: price });
@@ -404,16 +403,20 @@
         const n = document.getElementById(`edit-name-${id}`).value.trim();
         const p = parseFloat(document.getElementById(`edit-price-${id}`).value);
         const item = productCatalogue.find(x => x.id === id);
-        if(item) { item.name = n; item.price = p; renderProductLists(); alert("Updated!"); }
+        if(item) { 
+            item.name = n; 
+            item.price = p; 
+            renderProductLists(); 
+            alert("Updated!"); 
+        }
     }
 
-    style="padding:4px 8px;"
     function deleteProduct(id) {
         productCatalogue = productCatalogue.filter(x => x.id !== id);
         renderProductLists();
     }
 
-    // --- BILLING LOGIC ---
+    // --- BILLING DESK LOGIC ---
     function lookupCustomer() {
         let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
         if (phone.length === 10) phone = '91' + phone;
@@ -485,4 +488,4 @@
         if (phone.length === 10) phone = '91' + phone;
 
         const msg = `Hi ${name}! Use your registered phone number ${phone} to get 10% off your next checkout!`;
-        window.open(`https://wa.me/${phone}
+        window.open(`https:
