@@ -115,7 +115,7 @@
         input:focus { outline: none; border-color: var(--accent-color); }
 
         .product-select-list {
-            max-height: 180px; overflow-y: auto;
+            max-height: 220px; overflow-y: auto;
             border: 1px solid var(--border-color); padding: 10px;
             border-radius: 4px; margin-bottom: 15px;
         }
@@ -129,13 +129,17 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border-color); }
         th { background-color: #252525; }
+
+        .inline-form {
+            display: flex; gap: 10px; margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.3 Final</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.4 Catalogue Control</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
@@ -176,20 +180,8 @@
                 </div>
 
                 <h3>Select Products</h3>
-                <div class="product-select-list">
-                    <div class="product-item">
-                        <label><input type="checkbox" value="Wireless Mouse" data-price="1200.00" onchange="calculateTotal()"> Wireless Mouse (₹1,200.00)</label>
-                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
-                    </div>
-                    <div class="product-item">
-                        <label><input type="checkbox" value="Mechanical Keyboard" data-price="4500.00" onchange="calculateTotal()"> Mechanical Keyboard (₹4,500.00)</label>
-                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
-                    </div>
-                    <div class="product-item">
-                        <label><input type="checkbox" value="HDMI Cable 2m" data-price="350.00" onchange="calculateTotal()"> HDMI Cable 2m (₹350.00)</label>
-                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
-                    </div>
-                </div>
+                <!-- Dynamic product list filled by JavaScript -->
+                <div class="product-select-list" id="cashier-product-list"></div>
 
                 <div class="form-group">
                     <label for="bill-coupon">Coupon Code (Customer Phone)</label>
@@ -220,7 +212,7 @@
 
 
     <!-- ========================================== -->
-    <!-- 👑 OWNER VIEW: DASHBOARD, REPORTS & DATA  -->
+    <!-- 👑 OWNER VIEW: DASHBOARD, CATALOGUE & DATA -->
     <!-- ========================================== -->
     <div id="owner-view" class="view-section">
         
@@ -242,6 +234,33 @@
             <div class="card">
                 <h3>Repeat Customer Count</h3>
                 <div class="value" id="dash-repeats">0</div>
+            </div>
+        </div>
+
+        <!-- 🏷️ PRODUCT CATALOGUE MANAGEMENT PANEL -->
+        <h2>📦 Product Catalogue Management</h2>
+        <div class="panel">
+            <h3>Add New Product</h3>
+            <div class="inline-form">
+                <input type="text" id="new-prod-name" placeholder="Product Name (e.g., Wireless Mouse)">
+                <input type="number" id="new-prod-price" placeholder="Price in ₹ (e.g., 1200)">
+                <button class="btn btn-success" onclick="addNewProduct()">➕ Add Item</button>
+            </div>
+            
+            <h3>Active Items</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Price (₹)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="catalogue-table-body">
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -290,7 +309,14 @@
 <script>
     // System Configurations
     let currentRole = "cashier";
-    const OWNER_PASSWORD = "1234"; // Modify this string to update your owner passkey
+    const OWNER_PASSWORD = "1234";
+
+    // Master Product Catalogue Array
+    let productCatalogue = [
+        { id: 1, name: "Wireless Mouse", price: 1200.00 },
+        { id: 2, name: "Mechanical Keyboard", price: 4500.00 },
+        { id: 3, name: "HDMI Cable 2m", price: 350.00 }
+    ];
 
     // Mock Backend Database
     const mockCustomers = {
@@ -301,7 +327,85 @@
     let totalRevenue = 0;
     let todaySales = 0;
 
+    // Initial setup
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
+    renderProductLists();
+
+    // --- CATALOGUE CORE FUNCTIONS ---
+    function renderProductLists() {
+        // 1. Render for Cashier Desk
+        const cashierContainer = document.getElementById('cashier-product-list');
+        cashierContainer.innerHTML = '';
+        productCatalogue.forEach(prod => {
+            cashierContainer.innerHTML += `
+                <div class="product-item">
+                    <label><input type="checkbox" value="${prod.name}" data-price="${prod.price}" onchange="calculateTotal()"> ${prod.name} (₹${prod.price.toLocaleString('en-IN')})</label>
+                    <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
+                </div>`;
+        });
+
+        // 2. Render for Owner Admin View
+        const catalogueContainer = document.getElementById('catalogue-table-body');
+        catalogueContainer.innerHTML = '';
+        productCatalogue.forEach(prod => {
+            catalogueContainer.innerHTML += `
+                <tr>
+                    <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="background:#2d2d2d; border:1px solid #444;"></td>
+                    <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="background:#2d2d2d; border:1px solid #444; width:120px;"></td>
+                    <td>
+                        <button class="btn btn-success" style="padding: 5px 10px; font-size:0.85rem;" onclick="updateProduct(${prod.id})">Save Changes</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size:0.85rem;" onclick="deleteProduct(${prod.id})">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function addNewProduct() {
+        const nameInput = document.getElementById('new-prod-name');
+        const priceInput = document.getElementById('new-prod-price');
+        const name = nameInput.value.trim();
+        const price = parseFloat(priceInput.value);
+
+        if (!name || isNaN(price) || price <= 0) {
+            alert("⚠️ Please enter a valid product name and price.");
+            return;
+        }
+
+        const newId = productCatalogue.length > 0 ? Math.max(...productCatalogue.map(p => p.id)) + 1 : 1;
+        productCatalogue.push({ id: newId, name: name, price: price });
+        
+        nameInput.value = '';
+        priceInput.value = '';
+        renderProductLists();
+        alert("🎉 Product successfully added to your catalogue!");
+    }
+
+    function updateProduct(id) {
+        const updatedName = document.getElementById(`edit-name-${id}`).value.trim();
+        const updatedPrice = parseFloat(document.getElementById(`edit-price-${id}`).value);
+
+        if (!updatedName || isNaN(updatedPrice) || updatedPrice <= 0) {
+            alert("⚠️ Invalid item entries.");
+            return;
+        }
+
+        const product = productCatalogue.find(p => p.id === id);
+        if (product) {
+            product.name = updatedName;
+            product.price = updatedPrice;
+            renderProductLists();
+            calculateTotal(); // recalculate live total if cashier has boxes checked
+            alert("✨ Product details updated successfully!");
+        }
+    }
+
+    function deleteProduct(id) {
+        if (confirm("Are you sure you want to remove this product from the inventory?")) {
+            productCatalogue = productCatalogue.filter(p => p.id !== id);
+            renderProductLists();
+            calculateTotal();
+        }
+    }
 
     // --- SECURITY & VIEW CONTROLLER ---
     function requestOwnerAccess() {
@@ -315,6 +419,7 @@
                 document.getElementById('current-role-badge').style.color = "#ffc107";
                 document.getElementById('toggle-role-btn').innerText = "🔒 Lock to Cashier View";
                 document.getElementById('toggle-role-btn').className = "btn btn-danger";
+                renderProductLists(); // ensure catalog displays sync instantly
             } else {
                 alert("❌ Incorrect Passcode. Access Denied.");
             }
@@ -357,7 +462,7 @@
 
     function calculateTotal() {
         let total = 0;
-        const checkboxes = document.querySelectorAll('.product-select-list input[type="checkbox"]');
+        const checkboxes = document.querySelectorAll('#cashier-product-list input[type="checkbox"]');
         
         checkboxes.forEach(box => {
             if (box.checked) {
@@ -381,7 +486,6 @@
         return total;
     }
 
-    // SAVES INTERNAL METRICS AND LAUNCHES WHATSAPP AUTOMATICALLY WITH PROTOCOL SANITATION
     function saveAndSendBill() {
         let phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
@@ -393,69 +497,5 @@
             return;
         }
 
-        // Sanitize and format the number to ensure 0 is not dropped
         phone = phone.replace(/[^0-9]/g, ''); 
-        if (phone.length === 10) {
-            phone = '91' + phone;
-        }
-
-        const billId = "BILL-" + Math.floor(100000 + Math.random() * 900000);
-        const dateTime = new Date().toLocaleString();
-
-        let itemsSummary = [];
-        const checkboxes = document.querySelectorAll('.product-select-list input[type="checkbox"]');
-        checkboxes.forEach(box => {
-            if (box.checked) {
-                const note = box.closest('.product-item').querySelector('.prod-note').value;
-                itemsSummary.push(`${box.value} ${note ? '['+note+']' : ''}`);
-            }
-        });
-
-        // 1. Log metrics to Owner Dashboard 
-        totalRevenue += total;
-        todaySales += total;
-        
-        document.getElementById('dash-revenue').innerText = `₹${totalRevenue.toFixed(2)}`;
-        document.getElementById('dash-today-sales').innerText = `₹${todaySales.toFixed(2)}`;
-
-        // 2. Build row inside secure Owner history ledger
-        const tbody = document.getElementById('history-table-body');
-        const row = `<tr>
-            <td><strong>${billId}</strong></td>
-            <td>${dateTime}</td>
-            <td>${name} (${phone})<br><small>${area}</small></td>
-            <td>${itemsSummary.join(', ')}</td>
-            <td style="color: var(--success-color); font-weight:bold;">₹${total.toFixed(2)}</td>
-        </tr>`;
-        tbody.innerHTML = row + tbody.innerHTML;
-
-        // 3. Fire up WhatsApp message immediately with sanitized phone string
-        const message = `Hello ${name}, thank you for shopping with us! Your invoice #${billId} has been generated successfully. Total Amount Due: ₹${total.toFixed(2)}. Items: ${itemsSummary.join(', ')}`;
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-
-        // 4. Safely wipe out Cashier Workspace layout for next order entries
-        document.getElementById('bill-phone').value = '';
-        document.getElementById('bill-name').value = '';
-        document.getElementById('bill-area').value = '';
-        document.getElementById('bill-coupon').value = '';
-        checkboxes.forEach(box => { box.checked = false; box.closest('.product-item').querySelector('.prod-note').value = ''; });
-        document.getElementById('bill-total').innerText = "₹0.00";
-    }
-
-    function sendPromoWhatsApp() {
-        let phone = document.getElementById('bill-phone').value.trim();
-        const name = document.getElementById('bill-name').value.trim();
-        if(!phone || !name) { alert("Please input active client phone and name information."); return; }
-        
-        phone = phone.replace(/[^0-9]/g, ''); 
-        if (phone.length === 10) {
-            phone = '91' + phone;
-        }
-
-        const message = `Hi ${name}! Thank you for choosing us. Use your register phone digit ${phone} to claim 10% off your next checkout!`;
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-    }
-</script>
-</body>
-</html>
-
+      
