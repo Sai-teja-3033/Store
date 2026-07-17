@@ -135,7 +135,7 @@
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.2 INR</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.3 Final</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
@@ -160,7 +160,7 @@
             <!-- Left Side: Invoice Builder -->
             <div class="panel">
                 <div class="form-group">
-                    <label for="bill-phone">Customer Phone Number (with Country Code, e.g., 919876543210)</label>
+                    <label for="bill-phone">Customer Phone Number (e.g., 6303779868)</label>
                     <input type="text" id="bill-phone" placeholder="Enter phone number..." oninput="lookupCustomer()">
                     <small id="customer-status" style="color: var(--accent-color); display:block; margin-top:5px;"></small>
                 </div>
@@ -172,7 +172,7 @@
 
                 <div class="form-group">
                     <label for="bill-area">Area/Location</label>
-                    <input type="text" id="bill-area" placeholder="e.g. Mumbai South">
+                    <input type="text" id="bill-area" placeholder="e.g. Hyderabad East">
                 </div>
 
                 <h3>Select Products</h3>
@@ -200,14 +200,13 @@
                     Total Due: <span id="bill-total" style="color: var(--success-color);">₹0.00</span>
                 </div>
 
-                <!-- NEW ACTION FLUIDITY: SAYS SAVE AND SEND INSTANTLY -->
                 <button class="btn btn-success" style="width: 100%; font-size: 1.2rem; padding: 15px;" onclick="saveAndSendBill()">💾 Save & Send Bill Via WhatsApp</button>
             </div>
 
             <!-- Right Side: Secondary Actions -->
             <div class="panel">
                 <h3>📢 Quick Marketing</h3>
-                <p style="font-size: 0.85rem; color: #aaa;">Send custom introductory structures to your client data instantly.</p>
+                <p style="font-size: 0.85rem; color: #aaa;">Send special promo discount links to your customers instantly.</p>
                 <button class="btn" style="background-color: #555; width: 100%;" onclick="sendPromoWhatsApp()">Send Promo Offer Discount</button>
 
                 <h3 style="margin-top: 30px;">🏷️ Active Coupon Status</h3>
@@ -291,7 +290,7 @@
 <script>
     // System Configurations
     let currentRole = "cashier";
-    const OWNER_PASSWORD = "1234";
+    const OWNER_PASSWORD = "1234"; // Modify this string to update your owner passkey
 
     // Mock Backend Database
     const mockCustomers = {
@@ -332,7 +331,12 @@
 
     // --- CASHIER INTERFACE ENGINE ---
     function lookupCustomer() {
-        const phone = document.getElementById('bill-phone').value.trim();
+        let phone = document.getElementById('bill-phone').value.trim();
+        phone = phone.replace(/[^0-9]/g, ''); 
+        if (phone.length === 10) {
+            phone = '91' + phone;
+        }
+
         const statusText = document.getElementById('customer-status');
         const nameInput = document.getElementById('bill-name');
         const areaInput = document.getElementById('bill-area');
@@ -361,20 +365,25 @@
             }
         });
 
-        const phone = document.getElementById('bill-phone').value.trim();
+        let phone = document.getElementById('bill-phone').value.trim();
+        phone = phone.replace(/[^0-9]/g, ''); 
+        if (phone.length === 10) {
+            phone = '91' + phone;
+        }
+        
         const couponEntered = document.getElementById('bill-coupon').value.trim();
         
-        if (couponEntered && couponEntered === phone && mockCustomers[phone] && mockCustomers[phone].couponStatus === "Sent") {
-            total = total * 0.9; // 10% discount applied structurally
+        if (couponEntered && (couponEntered === phone || '91'+couponEntered === phone) && mockCustomers[phone] && mockCustomers[phone].couponStatus === "Sent") {
+            total = total * 0.9; 
         }
 
         document.getElementById('bill-total').innerText = `₹${total.toFixed(2)}`;
         return total;
     }
 
-    // UPGRADED METHOD: SAVES INTERNALLY AND TRIPPERS WHATSAPP AT THE SAME INSTANT
+    // SAVES INTERNAL METRICS AND LAUNCHES WHATSAPP AUTOMATICALLY WITH PROTOCOL SANITATION
     function saveAndSendBill() {
-        const phone = document.getElementById('bill-phone').value.trim();
+        let phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
         const area = document.getElementById('bill-area').value.trim();
         const total = calculateTotal();
@@ -382,6 +391,12 @@
         if (!phone || !name || total === 0) {
             alert("⚠️ Please verify client data entries and select items.");
             return;
+        }
+
+        // Sanitize and format the number to ensure 0 is not dropped
+        phone = phone.replace(/[^0-9]/g, ''); 
+        if (phone.length === 10) {
+            phone = '91' + phone;
         }
 
         const billId = "BILL-" + Math.floor(100000 + Math.random() * 900000);
@@ -396,7 +411,7 @@
             }
         });
 
-        // 1. Log metrics to Owner Backend Dashboard securely
+        // 1. Log metrics to Owner Dashboard 
         totalRevenue += total;
         todaySales += total;
         
@@ -414,11 +429,11 @@
         </tr>`;
         tbody.innerHTML = row + tbody.innerHTML;
 
-        // 3. Fire up WhatsApp message immediately in a clean new web view
+        // 3. Fire up WhatsApp message immediately with sanitized phone string
         const message = `Hello ${name}, thank you for shopping with us! Your invoice #${billId} has been generated successfully. Total Amount Due: ₹${total.toFixed(2)}. Items: ${itemsSummary.join(', ')}`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
 
-        // 4. Safely clean up Cashier Workspace layout for next order entries
+        // 4. Safely wipe out Cashier Workspace layout for next order entries
         document.getElementById('bill-phone').value = '';
         document.getElementById('bill-name').value = '';
         document.getElementById('bill-area').value = '';
@@ -428,12 +443,19 @@
     }
 
     function sendPromoWhatsApp() {
-        const phone = document.getElementById('bill-phone').value.trim();
+        let phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
         if(!phone || !name) { alert("Please input active client phone and name information."); return; }
+        
+        phone = phone.replace(/[^0-9]/g, ''); 
+        if (phone.length === 10) {
+            phone = '91' + phone;
+        }
+
         const message = `Hi ${name}! Thank you for choosing us. Use your register phone digit ${phone} to claim 10% off your next checkout!`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
     }
 </script>
 </body>
 </html>
+
