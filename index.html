@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Management System</title>
+    <title>Store Management & Billing System</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -11,6 +11,7 @@
             --text-color: #e0e0e0;
             --accent-color: #00adb5;
             --success-color: #28a745;
+            --danger-color: #dc3545;
             --border-color: #333;
         }
 
@@ -29,91 +30,14 @@
 
         header {
             border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
+            padding-bottom: 15px;
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        h1, h2, h3 {
-            color: #fff;
-            margin-top: 0;
-        }
-
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-
-        .card h3 {
-            font-size: 0.9rem;
-            color: #aaa;
-            text-transform: uppercase;
-        }
-
-        .card .value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            margin-top: 5px;
-        }
-
-        /* Main Workspace Splitting */
-        .workspace {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .workspace { grid-template-columns: 1fr; }
-        }
-
-        .panel {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Form styling */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: #2d2d2d;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            border-radius: 4px;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
+        h1, h2, h3 { color: #fff; margin-top: 0; }
 
         .btn {
             background-color: var(--accent-color);
@@ -123,169 +47,261 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            width: 100%;
-            margin-top: 10px;
         }
-
         .btn:hover { opacity: 0.9; }
         .btn-success { background-color: var(--success-color); }
+        .btn-danger { background-color: var(--danger-color); }
 
-        /* Item Selection List */
-        .product-select-list {
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-
-        .product-item {
+        /* Role Navigation Bar */
+        .role-nav {
+            background-color: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 0;
-            border-bottom: 1px solid #2d2d2d;
+            border: 1px solid var(--border-color);
         }
 
-        .product-item input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        /* Table Styling */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
         }
 
-        th, td {
-            text-align: left;
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
+        .card h3 { font-size: 0.9rem; color: #aaa; text-transform: uppercase; }
+        .card .value { font-size: 2rem; font-weight: bold; color: var(--accent-color); margin-top: 5px; }
+
+        /* Billing Layout Split */
+        .billing-workspace {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
         }
 
+        @media (max-width: 768px) {
+            .billing-workspace { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #ccc; }
+        input, select, textarea {
+            width: 100%; padding: 10px; box-sizing: border-box;
+            background-color: #2d2d2d; border: 1px solid var(--border-color);
+            color: #fff; border-radius: 4px;
+        }
+        input:focus { outline: none; border-color: var(--accent-color); }
+
+        .product-select-list {
+            max-height: 180px; overflow-y: auto;
+            border: 1px solid var(--border-color); padding: 10px;
+            border-radius: 4px; margin-bottom: 15px;
+        }
+
+        .product-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid #2d2d2d;
+        }
+        .product-item input[type="checkbox"] { width: auto; margin-right: 10px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border-color); }
         th { background-color: #252525; }
+
+        /* Owner Login Modal Mock */
+        .login-box {
+            max-width: 400px; margin: 100px auto;
+            background: var(--card-bg); padding: 30px;
+            border-radius: 8px; border: 1px solid var(--border-color);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.0</span></h1>
-        <div id="live-clock"></div>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.1 Split-View</span></h1>
+        <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
-    <!-- 📊 DASHBOARD SECTION -->
-    <h2>📊 Dashboard</h2>
-    <div class="dashboard-grid">
-        <div class="card">
-            <h3>Total Customers</h3>
-            <div class="value" id="dash-customers">2</div>
+    <!-- 🧭 ROLE NAVIGATION BAR -->
+    <div class="role-nav">
+        <div>
+            <span style="font-weight: bold;">Current View: </span>
+            <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color);">🛒 Cashier Desk</span>
         </div>
-        <div class="card">
-            <h3>Today's Sales</h3>
-            <div class="value" id="dash-today-sales">$0.00</div>
-        </div>
-        <div class="card">
-            <h3>Total Revenue</h3>
-            <div class="value" id="dash-revenue">$0.00</div>
-        </div>
-        <div class="card">
-            <h3>Repeat Customers</h3>
-            <div class="value" id="dash-repeats">0</div>
+        <div>
+            <button class="btn" id="toggle-role-btn" onclick="requestOwnerAccess()">🔑 Switch to Owner Mode</button>
         </div>
     </div>
 
-    <!-- 🛠 WORKSPACE -->
-    <div class="workspace">
+    <!-- ========================================== -->
+    <!-- 🛒 CASHIER VIEW: BILLING INTERFACE ONLY     -->
+    <!-- ========================================== -->
+    <div id="cashier-view" class="view-section active">
+        <h2>🧾 Cashier Billing Desk</h2>
+        <div class="billing-workspace">
+            
+            <!-- Left Side: Invoice Builder -->
+            <div class="panel">
+                <div class="form-group">
+                    <label for="bill-phone">Customer Phone Number</label>
+                    <input type="text" id="bill-phone" placeholder="Enter phone number..." oninput="lookupCustomer()">
+                    <small id="customer-status" style="color: var(--accent-color); display:block; margin-top:5px;"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="bill-name">Customer Name</label>
+                    <input type="text" id="bill-name" placeholder="Name auto-loads or enter new...">
+                </div>
+
+                <div class="form-group">
+                    <label for="bill-area">Area/Location</label>
+                    <input type="text" id="bill-area" placeholder="e.g. Downtown">
+                </div>
+
+                <h3>Select Products</h3>
+                <div class="product-select-list">
+                    <div class="product-item">
+                        <label><input type="checkbox" value="Wireless Mouse" data-price="25.00" onchange="calculateTotal()"> Wireless Mouse ($25.00)</label>
+                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
+                    </div>
+                    <div class="product-item">
+                        <label><input type="checkbox" value="Mechanical Keyboard" data-price="75.00" onchange="calculateTotal()"> Mechanical Keyboard ($75.00)</label>
+                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
+                    </div>
+                    <div class="product-item">
+                        <label><input type="checkbox" value="HDMI Cable 2m" data-price="12.00" onchange="calculateTotal()"> HDMI Cable 2m ($12.00)</label>
+                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bill-coupon">Coupon Code (Customer Phone)</label>
+                    <input type="text" id="bill-coupon" placeholder="Enter coupon code..." oninput="calculateTotal()">
+                </div>
+
+                <div style="font-size: 1.6rem; margin: 20px 0; font-weight: bold; text-align: right;">
+                    Total Due: <span id="bill-total" style="color: var(--success-color);">$0.00</span>
+                </div>
+
+                <button class="btn btn-success" style="width: 100%; font-size: 1.1rem;" onclick="generateAndSaveBill()">Generate & Save Bill</button>
+            </div>
+
+            <!-- Right Side: Cashier Actions & Messaging -->
+            <div class="panel">
+                <h3>💬 WhatsApp Integration</h3>
+                <p style="font-size: 0.85rem; color: #aaa;">Click below after generating a bill to text the invoice directly to the customer.</p>
+                <button class="btn" id="whatsapp-btn" disabled onclick="sendWhatsApp()" style="width: 100%; margin-bottom: 10px;">Send Receipt via WhatsApp</button>
+                <button class="btn" style="background-color: #555; width: 100%;" onclick="sendPromoWhatsApp()">Send Promo Offer</button>
+
+                <h3 style="margin-top: 30px;">🏷️ Active Coupon Status</h3>
+                <div id="coupon-status-box" style="background:#252525; padding: 12px; border-radius:4px; font-size:0.9rem;">
+                    Awaiting customer details...
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- 👑 OWNER VIEW: DASHBOARD, REPORTS & DATA  -->
+    <!-- ========================================== -->
+    <div id="owner-view" class="view-section">
         
-        <!-- BILLING PANEL -->
-        <div class="panel">
-            <h2>🧾 Billing System</h2>
-            
-            <div class="form-group">
-                <label for="bill-phone">Customer Phone Number</label>
-                <input type="text" id="bill-phone" placeholder="Enter phone number..." oninput="lookupCustomer()">
-                <small id="customer-status" style="color: var(--accent-color); display:block; margin-top:5px;"></small>
+        <!-- 📊 OWNER DASHBOARD MATRICS -->
+        <h2>📊 Owner Management Dashboard</h2>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Total Customers Tracking</h3>
+                <div class="value" id="dash-customers">2</div>
             </div>
-
-            <div class="form-group">
-                <label for="bill-name">Customer Name</label>
-                <input type="text" id="bill-name" placeholder="Name auto-loads or enter new...">
+            <div class="card">
+                <h3>Today's Live Sales</h3>
+                <div class="value" id="dash-today-sales">$0.00</div>
             </div>
-
-            <div class="form-group">
-                <label for="bill-area">Area/Location</label>
-                <input type="text" id="bill-area" placeholder="e.g. Downtown">
+            <div class="card">
+                <h3>Total Safe Revenue</h3>
+                <div class="value" id="dash-revenue">$0.00</div>
             </div>
-
-            <h3>Select Products</h3>
-            <div class="product-select-list">
-                <div class="product-item">
-                    <label><input type="checkbox" value="Wireless Mouse" data-price="25.00" onchange="calculateTotal()"> Wireless Mouse ($25.00)</label>
-                    <input type="text" placeholder="Add custom notes..." class="prod-note" style="width: 40%; padding: 3px;">
-                </div>
-                <div class="product-item">
-                    <label><input type="checkbox" value="Mechanical Keyboard" data-price="75.00" onchange="calculateTotal()"> Mechanical Keyboard ($75.00)</label>
-                    <input type="text" placeholder="Add custom notes..." class="prod-note" style="width: 40%; padding: 3px;">
-                </div>
-                <div class="product-item">
-                    <label><input type="checkbox" value="HDMI Cable 2m" data-price="12.00" onchange="calculateTotal()"> HDMI Cable 2m ($12.00)</label>
-                    <input type="text" placeholder="Add custom notes..." class="prod-note" style="width: 40%; padding: 3px;">
-                </div>
+            <div class="card">
+                <h3>Repeat Customer Count</h3>
+                <div class="value" id="dash-repeats">0</div>
             </div>
-
-            <div class="form-group">
-                <label for="bill-coupon">Coupon Code (Try customer's phone if returning)</label>
-                <input type="text" id="bill-coupon" placeholder="Enter coupon..." oninput="calculateTotal()">
-            </div>
-
-            <div style="font-size: 1.3rem; margin: 20px 0; font-weight: bold; text-align: right;">
-                Total Due: <span id="bill-total" style="color: var(--success-color);">$0.00</span>
-            </div>
-
-            <button class="btn btn-success" onclick="generateAndSaveBill()">Generate & Save Bill</button>
         </div>
 
-        <!-- WHATSAPP & ACTIONS PANEL -->
-        <div class="panel">
-            <h2>💬 Actions & WhatsApp</h2>
-            <p style="font-size: 0.9rem; color: #aaa;">Once a bill is generated, click below to instantly prepare a pre-filled message for your customer.</p>
-            <button class="btn" id="whatsapp-btn" disabled onclick="sendWhatsApp()">Send Bill via WhatsApp</button>
-            <button class="btn" style="background-color: #555; margin-top: 10px;" onclick="sendPromoWhatsApp()">Send Promo Offer to Current Customer</button>
-            
-            <h3 style="margin-top: 30px;">🏷 Coupon System Check</h3>
-            <p style="font-size: 0.85rem; color: #aaa;">Coupons map to phone numbers for one-time use eligibility.</p>
-            <div id="coupon-status-box" style="background:#252525; padding: 10px; border-radius:4px; font-size:0.9rem;">
-                No phone selected.
-            </div>
+        <!-- 📜 SECURE HISTORICAL LOGS -->
+        <h2>📜 Sales Audit & Bill History</h2>
+        <div class="panel" style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bill ID</th>
+                        <th>Date & Time</th>
+                        <th>Customer Details</th>
+                        <th>Items Bought & Custom Notes</th>
+                        <th>Revenue Generated</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table-body">
+                    <!-- Securely populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 👥 CLIENT DATABASE REGISTER -->
+        <h2>👥 Customer Profiles & CRM</h2>
+        <div class="panel" style="overflow-x: auto;">
+            <table id="customer-table">
+                <thead>
+                    <tr>
+                        <th>Phone</th>
+                        <th>Name</th>
+                        <th>Registered Area</th>
+                        <th>Total Visits</th>
+                        <th>Lifetime Spend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>9876543210</td><td>John Doe</td><td>North End</td><td>3</td><td>$150.00</td></tr>
+                    <tr><td>5551234567</td><td>Jane Smith</td><td>Westside</td><td>1</td><td>$45.00</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- 🕒 BILL HISTORY LOG -->
-    <h2 style="margin-top: 40px;">📜 Bill History & Reports</h2>
-    <div class="panel" style="overflow-x: auto;">
-        <table>
-            <thead>
-                <tr>
-                    <th>Bill ID</th>
-                    <th>Date & Time</th>
-                    <th>Customer Name (Phone)</th>
-                    <th>Products & Notes</th>
-                    <th>Total Amount</th>
-                </tr>
-            </thead>
-            <tbody id="history-table-body">
-                <!-- Dynamic Content Rows go here -->
-            </tbody>
-        </table>
-    </div>
 </div>
 
 <script>
-    // Mock Database
+    // System Configurations
+    let currentRole = "cashier";
+    const OWNER_PASSWORD = "1234"; // Default Owner PIN
+
+    // Mock Backend Database
     const mockCustomers = {
         "9876543210": { name: "John Doe", area: "North End", visits: 3, spent: 150, couponStatus: "Claimed" },
         "5551234567": { name: "Jane Smith", area: "Westside", visits: 1, spent: 45, couponStatus: "Sent" }
@@ -295,10 +311,36 @@
     let todaySales = 0;
     let lastGeneratedBill = null;
 
-    // Set dynamic date
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
 
-    // 1. Auto Load Customer Details
+    // --- SECURITY & VIEW CONTROLLER ---
+    function requestOwnerAccess() {
+        if (currentRole === "cashier") {
+            const password = prompt("🔐 Enter Owner Security Passcode:");
+            if (password === OWNER_PASSWORD) {
+                currentRole = "owner";
+                document.getElementById('cashier-view').classList.remove('active');
+                document.getElementById('owner-view').classList.add('active');
+                document.getElementById('current-role-badge').innerText = "👑 Owner Management Mode";
+                document.getElementById('current-role-badge').style.color = "#ffc107";
+                document.getElementById('toggle-role-btn').innerText = "🔒 Lock to Cashier View";
+                document.getElementById('toggle-role-btn').className = "btn btn-danger";
+            } else {
+                alert("❌ Incorrect Passcode. Access Denied.");
+            }
+        } else {
+            // Lock back down to cashier mode instantly
+            currentRole = "cashier";
+            document.getElementById('owner-view').classList.remove('active');
+            document.getElementById('cashier-view').classList.add('active');
+            document.getElementById('current-role-badge').innerText = "🛒 Cashier Desk";
+            document.getElementById('current-role-badge').style.color = "var(--accent-color)";
+            document.getElementById('toggle-role-btn').innerText = "🔑 Switch to Owner Mode";
+            document.getElementById('toggle-role-btn').className = "btn";
+        }
+    }
+
+    // --- CASHIER INTERFACE ENGINE ---
     function lookupCustomer() {
         const phone = document.getElementById('bill-phone').value.trim();
         const statusText = document.getElementById('customer-status');
@@ -308,18 +350,17 @@
 
         if (mockCustomers[phone]) {
             const customer = mockCustomers[phone];
-            statusText.innerText = `✨ Existing Customer Found! (${customer.visits} previous visits)`;
+            statusText.innerText = `✨ Returning Customer Verified!`;
             nameInput.value = customer.name;
             areaInput.value = customer.area;
-            couponBox.innerHTML = `<strong>Status:</strong> ${customer.couponStatus}<br><small>Phone matches Coupon Code eligibility.</small>`;
+            couponBox.innerHTML = `<strong>Coupon Status:</strong> ${customer.couponStatus}`;
         } else {
-            statusText.innerText = phone.length > 5 ? "🆕 New Customer - Details will save." : "";
-            couponBox.innerHTML = "No active records for this entry.";
+            statusText.innerText = phone.length > 5 ? "🆕 Registering New Customer Profile" : "";
+            couponBox.innerHTML = "No active coupon mapping for entry.";
         }
         calculateTotal();
     }
 
-    // 2. Automatic Total Calculation
     function calculateTotal() {
         let total = 0;
         const checkboxes = document.querySelectorAll('.product-select-list input[type="checkbox"]');
@@ -330,19 +371,17 @@
             }
         });
 
-        // Coupon Logic: If coupon matches phone and isn't claimed yet, apply 10% off
         const phone = document.getElementById('bill-phone').value.trim();
         const couponEntered = document.getElementById('bill-coupon').value.trim();
         
         if (couponEntered && couponEntered === phone && mockCustomers[phone] && mockCustomers[phone].couponStatus === "Sent") {
-            total = total * 0.9; // 10% off
+            total = total * 0.9; // Apply 10% structural markdown
         }
 
         document.getElementById('bill-total').innerText = `$${total.toFixed(2)}`;
         return total;
     }
 
-    // 3. Generate Bill & Update History/Dashboard
     function generateAndSaveBill() {
         const phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
@@ -350,30 +389,30 @@
         const total = calculateTotal();
 
         if (!phone || !name || total === 0) {
-            alert("Please fill in Customer Details and select at least one product.");
+            alert("⚠️ Please verify client data entries and select items.");
             return;
         }
 
         const billId = "BILL-" + Math.floor(100000 + Math.random() * 900000);
         const dateTime = new Date().toLocaleString();
 
-        // Gather Selected Products and Notes
         let itemsSummary = [];
         const checkboxes = document.querySelectorAll('.product-select-list input[type="checkbox"]');
         checkboxes.forEach(box => {
             if (box.checked) {
                 const note = box.closest('.product-item').querySelector('.prod-note').value;
-                itemsSummary.push(`${box.value} ${note ? '('+note+')' : ''}`);
+                itemsSummary.push(`${box.value} ${note ? '['+note+']' : ''}`);
             }
         });
 
-        // Update Dashboard Metrics
+        // Backend state updates (Behind the scenes)
         totalRevenue += total;
         todaySales += total;
+        
         document.getElementById('dash-revenue').innerText = `$${totalRevenue.toFixed(2)}`;
         document.getElementById('dash-today-sales').innerText = `$${todaySales.toFixed(2)}`;
 
-        // Add to Table
+        // Update Secret Owner Log Row
         const tbody = document.getElementById('history-table-body');
         const row = `<tr>
             <td><strong>${billId}</strong></td>
@@ -384,33 +423,35 @@
         </tr>`;
         tbody.innerHTML = row + tbody.innerHTML;
 
-        // Store configuration for WhatsApp utility
+        // Unlock localized WhatsApp action
         lastGeneratedBill = { billId, name, phone, total: total.toFixed(2), items: itemsSummary.join(', ') };
         document.getElementById('whatsapp-btn').disabled = false;
 
-        alert(`Bill ${billId} successfully saved locally!`);
+        alert(`✅ System processed successfully! Bill ID: ${billId}`);
+        
+        // Reset Cashier Form fields safely
+        document.getElementById('bill-phone').value = '';
+        document.getElementById('bill-name').value = '';
+        document.getElementById('bill-area').value = '';
+        document.getElementById('bill-coupon').value = '';
+        checkboxes.forEach(box => { box.checked = false; box.closest('.product-item').querySelector('.prod-note').value = ''; });
+        document.getElementById('bill-total').innerText = "$0.00";
+        document.getElementById('whatsapp-btn').disabled = true;
     }
 
-    // 4. One-Click WhatsApp Messaging Integration
     function sendWhatsApp() {
         if (!lastGeneratedBill) return;
-        const message = `Hello ${lastGeneratedBill.name}, thank you for shopping with us! Your bill (${lastGeneratedBill.billId}) total is $${lastGeneratedBill.total}. Items: ${lastGeneratedBill.items}.`;
-        const encodedText = encodeURIComponent(message);
-        window.open(`https://wa.me/${lastGeneratedBill.phone}?text=${encodedText}`, '_blank');
+        const message = `Hello ${lastGeneratedBill.name}, thank you for your purchase! Invoice #${lastGeneratedBill.billId} details total $${lastGeneratedBill.total}. Items: ${lastGeneratedBill.items}`;
+        window.open(`https://wa.me/${lastGeneratedBill.phone}?text=${encodeURIComponent(message)}`, '_blank');
     }
 
     function sendPromoWhatsApp() {
         const phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
-        if(!phone || !name) {
-            alert("Please input customer phone & name first.");
-            return;
-        }
-        const message = `Hi ${name}! Use your phone number ${phone} as a coupon code on your next visit for a 10% discount!`;
+        if(!phone || !name) { alert("Please input active client data."); return; }
+        const message = `Hi ${name}! Thank you for choosing us. Use your register phone digit ${phone} to claim 10% off your text trip!`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
     }
 </script>
-
 </body>
 </html>
-
