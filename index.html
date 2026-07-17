@@ -118,23 +118,24 @@
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.9 Ultimate</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v2.0 Deploy Ready</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
-    <!-- 🧭 BAR CONTROLLER -->
+    <!-- 🧭 TOP ACCESS NAVIGATION BAR -->
     <div class="role-nav">
         <div>
             <span style="font-weight: bold;">Current Workspace: </span>
             <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color); font-weight: bold;">🛒 CASHIER VIEW</span>
         </div>
         
-        <!-- Native Form prevents JS action deadlocks -->
+        <!-- Login Form -->
         <form id="login-form" onsubmit="checkOwnerLogin(event);" style="display: flex; gap: 10px; align-items: center; margin: 0;">
             <input type="password" id="owner-pin-input" placeholder="Enter Owner PIN (1234)" style="width: 180px; padding: 8px;" required>
             <button type="submit" class="btn">Go to Owner Mode</button>
         </form>
         
+        <!-- Logout Bar -->
         <div id="logout-controls" style="display: none;">
             <button type="button" class="btn btn-danger" onclick="returnToCashier()">🔒 Lock back to Cashier</button>
         </div>
@@ -268,18 +269,17 @@
     let totalRevenue = 0;
     let todaySales = 0;
 
-    // Load dynamic structures immediately
+    // Load elements
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
     renderProductLists();
 
-    // --- ACCESSIBLE STABLE REDIRECTION CONTROLLERS ---
+    // --- WORKSPACE VIEW ROUTERS ---
     function checkOwnerLogin(event) {
-        if(event) event.preventDefault(); // Stop page from hard reloading
+        if(event) event.preventDefault();
         
         const inputPin = document.getElementById('owner-pin-input').value.trim();
         
         if (inputPin === CORRECT_PIN) {
-            // Raw inline style swapping is 100% reliable across browsers
             document.getElementById('cashier-view').style.display = 'none';
             document.getElementById('owner-view').style.display = 'block';
             
@@ -311,7 +311,7 @@
         renderProductLists();
     }
 
-    // --- CATALOGUE RENDER SYSTEM ---
+    // --- CATALOGUE CORE MANAGER ---
     function renderProductLists() {
         const cashierContainer = document.getElementById('cashier-product-list');
         if(cashierContainer) {
@@ -331,8 +331,8 @@
             productCatalogue.forEach(prod => {
                 catalogueContainer.innerHTML += `
                     <tr>
-                        <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="width:90%"></td>
-                        <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="width:100px;"></td>
+                        <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="width:90%; padding:5px; background:#2d2d2d; color:#fff; border:1px solid #444;"></td>
+                        <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="width:100px; padding:5px; background:#2d2d2d; color:#fff; border:1px solid #444;"></td>
                         <td>
                             <button type="button" class="btn btn-success" style="padding:4px 8px; font-size:12px;" onclick="updateProduct(${prod.id})">Save</button>
                             <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:12px;" onclick="deleteProduct(${prod.id})">Del</button>
@@ -371,7 +371,7 @@
         renderProductLists();
     }
 
-    // --- BILLING LOGIC ---
+    // --- BILLING MECHANICS ---
     function lookupCustomer() {
         let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
         if (phone.length === 10) phone = '91' + phone;
