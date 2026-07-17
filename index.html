@@ -124,7 +124,7 @@
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v2.2 Production</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v2.3 Production Stable</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
@@ -433,9 +433,10 @@
             if (checkBox && checkBox.checked) {
                 let qty = parseInt(qtyInput.value) || 1;
                 let itemPrice = parseFloat(checkBox.getAttribute('data-price'));
+                let computedItemTotal = itemPrice * qty;
                 
                 itemsHistorySummary.push(`${prod.name} (x${qty})`);
-                txtMessageItems += `\n- ${prod.name} (Qty: ${qty}) Amt: ₹${itemPrice.toFixed(2)}`;
+                txtMessageItems += `\n- ${prod.name} x${qty} = ₹${computedItemTotal.toFixed(2)}`;
             }
         });
 
@@ -449,8 +450,8 @@
             tbody.innerHTML = `<tr><td><strong>${billId}</strong></td><td>${new Date().toLocaleTimeString()}</td><td>${name} (${phone})</td><td>${itemsHistorySummary.join(', ')}</td><td>₹${total.toFixed(2)}</td></tr>` + tbody.innerHTML;
         }
 
-        // WhatsApp Custom formatting per instructions (No bill number)
-        const msg = `Thank you for visiting! Here is the bill:\n${txtMessageItems}\n\nTotal Amt: ₹${total.toFixed(2)}`;
+        // Cleaned up WhatsApp receipt precisely as requested (No Bill IDs)
+        const msg = `Thank you for visiting!\n\nHere is the bill:${txtMessageItems}\n\nTotal Amt: ₹${total.toFixed(2)}`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 
         // Clear workbench
@@ -474,7 +475,4 @@
 
         const msg = `Hi ${name}! Thank you for choosing us. Use your registered phone number ${phone} to get 10% off your next checkout!`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-</script>
-</body>
-</html>
+   
