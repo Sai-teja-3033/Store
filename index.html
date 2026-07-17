@@ -55,13 +55,15 @@
         /* Role Navigation Bar */
         .role-nav {
             background-color: var(--card-bg);
-            padding: 10px 20px;
+            padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .view-section { display: none; }
@@ -133,40 +135,28 @@
         .inline-form {
             display: flex; gap: 10px; margin-bottom: 15px;
         }
-
-        /* 🔐 POPUP LOCK OVERLAY SCREEN */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            justify-content: center; align-items: center;
-            z-index: 9999;
-        }
-        .modal-box {
-            background: var(--card-bg);
-            padding: 30px; border-radius: 8px;
-            border: 1px solid var(--border-color);
-            text-align: center; max-width: 320px; width: 100%;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.5 Premium</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.6 Fix</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
-    <!-- 🧭 ROLE NAVIGATION BAR -->
+    <!-- 🧭 SIMPLE INPUT BAR FOR SIGNIN -->
     <div class="role-nav">
         <div>
             <span style="font-weight: bold;">Current View: </span>
-            <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color);">🛒 Cashier Desk</span>
+            <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color); font-weight: bold;">🛒 CASHIER VIEW</span>
         </div>
-        <div>
-            <button class="btn" id="toggle-role-btn" onclick="handleRoleToggleClick()">🔑 Switch to Owner Mode</button>
+        <div id="login-controls" style="display: flex; gap: 10px; align-items: center;">
+            <input type="password" id="owner-pin-input" placeholder="Enter Owner PIN (1234)" style="width: 180px; padding: 8px;">
+            <button class="btn" onclick="checkOwnerLogin()">Go to Owner Mode</button>
+        </div>
+        <div id="logout-controls" style="display: none;">
+            <button class="btn btn-danger" onclick="returnToCashier()">🔒 Lock back to Cashier</button>
         </div>
     </div>
 
@@ -177,7 +167,6 @@
         <h2>🧾 Cashier Billing Desk</h2>
         <div class="billing-workspace">
             
-            <!-- Left Side: Invoice Builder -->
             <div class="panel">
                 <div class="form-group">
                     <label for="bill-phone">Customer Phone Number (e.g., 6303779868)</label>
@@ -210,7 +199,6 @@
                 <button class="btn btn-success" style="width: 100%; font-size: 1.2rem; padding: 15px;" onclick="saveAndSendBill()">💾 Save & Send Bill Via WhatsApp</button>
             </div>
 
-            <!-- Right Side: Secondary Actions -->
             <div class="panel">
                 <h3>📢 Quick Marketing</h3>
                 <p style="font-size: 0.85rem; color: #aaa;">Send special promo discount links to your customers instantly.</p>
@@ -231,7 +219,6 @@
     <!-- ========================================== -->
     <div id="owner-view" class="view-section">
         
-        <!-- 📊 OWNER DASHBOARD METRICS -->
         <h2>📊 Owner Management Dashboard</h2>
         <div class="dashboard-grid">
             <div class="card">
@@ -252,13 +239,12 @@
             </div>
         </div>
 
-        <!-- 🏷️ PRODUCT CATALOGUE MANAGEMENT PANEL -->
         <h2>📦 Product Catalogue Management</h2>
         <div class="panel">
             <h3>Add New Product</h3>
             <div class="inline-form">
-                <input type="text" id="new-prod-name" placeholder="Product Name (e.g., Wireless Mouse)">
-                <input type="number" id="new-prod-price" placeholder="Price in ₹ (e.g., 1200)">
+                <input type="text" id="new-prod-name" placeholder="Product Name">
+                <input type="number" id="new-prod-price" placeholder="Price in ₹">
                 <button class="btn btn-success" onclick="addNewProduct()">➕ Add Item</button>
             </div>
             
@@ -272,14 +258,11 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="catalogue-table-body">
-                        <!-- Populated dynamically -->
-                    </tbody>
+                    <tbody id="catalogue-table-body"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 📜 SECURE HISTORICAL LOGS -->
         <h2>📜 Sales Audit & Bill History</h2>
         <div class="panel" style="overflow-x: auto;">
             <table>
@@ -288,20 +271,17 @@
                         <th>Bill ID</th>
                         <th>Date & Time</th>
                         <th>Customer Details</th>
-                        <th>Items Bought & Custom Notes</th>
+                        <th>Items Bought & Notes</th>
                         <th>Revenue Generated</th>
                     </tr>
                 </thead>
-                <tbody id="history-table-body">
-                    <!-- Dynamic Rows Go Here -->
-                </tbody>
+                <tbody id="history-table-body"></tbody>
             </table>
         </div>
 
-        <!-- 👥 CLIENT DATABASE REGISTER -->
         <h2>👥 Customer Profiles & CRM</h2>
         <div class="panel" style="overflow-x: auto;">
-            <table id="customer-table">
+            <table>
                 <thead>
                     <tr>
                         <th>Phone</th>
@@ -321,32 +301,15 @@
 
 </div>
 
-<!-- 🔐 MODERN SECURITY MODAL OVERLAY -->
-<div class="modal-overlay" id="loginModal">
-    <div class="modal-box">
-        <h3 style="margin-bottom:10px;">🔐 Owner Verification</h3>
-        <p style="font-size:0.85rem; color:#aaa; margin-bottom:20px;">Please enter your master passcode pin to access the system dashboards.</p>
-        <div class="form-group">
-            <input type="password" id="ownerPasscodeField" placeholder="Enter PIN (Default: 1234)" style="text-align:center; font-size:1.2rem; letter-spacing:4px;">
-        </div>
-        <button class="btn btn-success" style="width:100%; margin-bottom:10px;" onclick="verifyOwnerPassword()">Verify Access</button>
-        <button class="btn btn-danger" style="width:100%; background:#444;" onclick="closeLoginModal()">Cancel</button>
-    </div>
-</div>
-
 <script>
-    // System Configurations
-    let currentRole = "cashier";
-    const OWNER_PASSWORD = "1234";
+    const CORRECT_PIN = "1234";
 
-    // Master Product Catalogue Array
     let productCatalogue = [
         { id: 1, name: "Wireless Mouse", price: 1200.00 },
         { id: 2, name: "Mechanical Keyboard", price: 4500.00 },
         { id: 3, name: "HDMI Cable 2m", price: 350.00 }
     ];
 
-    // Mock Backend Database
     const mockCustomers = {
         "919876543210": { name: "John Doe", area: "North End", visits: 3, spent: 4500, couponStatus: "Claimed" },
         "915551234567": { name: "Jane Smith", area: "Westside", visits: 1, spent: 1200, couponStatus: "Sent" }
@@ -355,16 +318,46 @@
     let totalRevenue = 0;
     let todaySales = 0;
 
-    // Initial setup
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
     renderProductLists();
 
-    // Attach Enter Key event to login box
-    document.getElementById('ownerPasscodeField').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') verifyOwnerPassword();
-    });
+    // --- SIMPLE LOGIN CHECK ---
+    function checkOwnerLogin() {
+        const inputPin = document.getElementById('owner-pin-input').value.trim();
+        if (inputPin === CORRECT_PIN) {
+            // Hide cashier view, show owner view
+            document.getElementById('cashier-view').style.display = 'none';
+            document.getElementById('owner-view').style.display = 'block';
+            
+            // Adjust login bar display
+            document.getElementById('login-controls').style.display = 'none';
+            document.getElementById('logout-controls').style.display = 'block';
+            
+            // Set badge
+            const badge = document.getElementById('current-role-badge');
+            badge.innerText = "👑 OWNER ADMIN VIEW";
+            badge.style.color = "#ffc107";
+            
+            renderProductLists();
+        } else {
+            alert("❌ Incorrect PIN code.");
+        }
+    }
 
-    // --- CATALOGUE CORE FUNCTIONS ---
+    function returnToCashier() {
+        document.getElementById('owner-view').style.display = 'none';
+        document.getElementById('cashier-view').style.display = 'block';
+        
+        document.getElementById('login-controls').style.display = 'flex';
+        document.getElementById('logout-controls').style.display = 'none';
+        document.getElementById('owner-pin-input').value = '';
+        
+        const badge = document.getElementById('current-role-badge');
+        badge.innerText = "🛒 CASHIER VIEW";
+        badge.style.color = "var(--accent-color)";
+    }
+
+    // --- CATALOGUE RENDER SYSTEM ---
     function renderProductLists() {
         const cashierContainer = document.getElementById('cashier-product-list');
         if(cashierContainer) {
@@ -372,8 +365,8 @@
             productCatalogue.forEach(prod => {
                 cashierContainer.innerHTML += `
                     <div class="product-item">
-                        <label><input type="checkbox" value="${prod.name}" data-price="${prod.price}" onchange="calculateTotal()"> ${prod.name} (₹${prod.price.toLocaleString('en-IN')})</label>
-                        <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
+                        <label><input type="checkbox" value="${prod.name}" data-price="${prod.price}" onchange="calculateTotal()"> ${prod.name} (₹${prod.price})</label>
+                        <input type="text" placeholder="Notes..." class="prod-note" style="width: 35%; padding: 5px;">
                     </div>`;
             });
         }
@@ -384,11 +377,11 @@
             productCatalogue.forEach(prod => {
                 catalogueContainer.innerHTML += `
                     <tr>
-                        <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="background:#2d2d2d; border:1px solid #444;"></td>
-                        <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="background:#2d2d2d; border:1px solid #444; width:120px;"></td>
+                        <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}"></td>
+                        <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="width:100px;"></td>
                         <td>
-                            <button class="btn btn-success" style="padding: 5px 10px; font-size:0.85rem;" onclick="updateProduct(${prod.id})">Save Changes</button>
-                            <button class="btn btn-danger" style="padding: 5px 10px; font-size:0.85rem;" onclick="deleteProduct(${prod.id})">Delete</button>
+                            <button class="btn btn-success" style="padding:4px 8px; font-size:12px;" onclick="updateProduct(${prod.id})">Save</button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:12px;" onclick="deleteProduct(${prod.id})">Del</button>
                         </td>
                     </tr>`;
             });
@@ -396,101 +389,100 @@
     }
 
     function addNewProduct() {
-        const nameInput = document.getElementById('new-prod-name');
-        const priceInput = document.getElementById('new-prod-price');
-        const name = nameInput.value.trim();
-        const price = parseFloat(priceInput.value);
+        const name = document.getElementById('new-prod-name').value.trim();
+        const price = parseFloat(document.getElementById('new-prod-price').value);
+        if (!name || isNaN(price)) return alert("Enter item details");
 
-        if (!name || isNaN(price) || price <= 0) {
-            alert("⚠️ Please enter a valid product name and price.");
-            return;
-        }
-
-        const newId = productCatalogue.length > 0 ? Math.max(...productCatalogue.map(p => p.id)) + 1 : 1;
+        const newId = Date.now();
         productCatalogue.push({ id: newId, name: name, price: price });
-        
-        nameInput.value = '';
-        priceInput.value = '';
+        document.getElementById('new-prod-name').value = '';
+        document.getElementById('new-prod-price').value = '';
         renderProductLists();
-        alert("🎉 Product successfully added to your catalogue!");
     }
 
     function updateProduct(id) {
-        const updatedName = document.getElementById(`edit-name-${id}`).value.trim();
-        const updatedPrice = parseFloat(document.getElementById(`edit-price-${id}`).value);
-
-        if (!updatedName || isNaN(updatedPrice) || updatedPrice <= 0) {
-            alert("⚠️ Invalid item entries.");
-            return;
-        }
-
-        const product = productCatalogue.find(p => p.id === id);
-        if (product) {
-            product.name = updatedName;
-            product.price = updatedPrice;
-            renderProductLists();
-            calculateTotal();
-            alert("✨ Product details updated successfully!");
-        }
+        const n = document.getElementById(`edit-name-${id}`).value.trim();
+        const p = parseFloat(document.getElementById(`edit-price-${id}`).value);
+        const item = productCatalogue.find(x => x.id === id);
+        if(item) { item.name = n; item.price = p; renderProductLists(); alert("Updated!"); }
     }
 
+    style="padding:4px 8px;"
     function deleteProduct(id) {
-        if (confirm("Are you sure you want to remove this product from the inventory?")) {
-            productCatalogue = productCatalogue.filter(p => p.id !== id);
-            renderProductLists();
-            calculateTotal();
-        }
+        productCatalogue = productCatalogue.filter(x => x.id !== id);
+        renderProductLists();
     }
 
-    // --- NEW SECURE MODAL CONTROLLERS ---
-    function handleRoleToggleClick() {
-        if (currentRole === "cashier") {
-            // Display modern popup overlay screen instead of buggy browser prompt
-            document.getElementById('loginModal').style.display = 'flex';
-            document.getElementById('ownerPasscodeField').value = '';
-            document.getElementById('ownerPasscodeField').focus();
-        } else {
-            // Instantly transition back to Cashier view mode safely
-            currentRole = "cashier";
-            document.getElementById('owner-view').classList.remove('active');
-            document.getElementById('cashier-view').classList.add('active');
-            document.getElementById('current-role-badge').innerText = "🛒 Cashier Desk";
-            document.getElementById('current-role-badge').style.color = "var(--accent-color)";
-            document.getElementById('toggle-role-btn').innerText = "🔑 Switch to Owner Mode";
-            document.getElementById('toggle-role-btn').className = "btn";
-        }
-    }
-
-    function verifyOwnerPassword() {
-        const enteredPin = document.getElementById('ownerPasscodeField').value.trim();
-        if (enteredPin === OWNER_PASSWORD) {
-            currentRole = "owner";
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('cashier-view').classList.remove('active');
-            document.getElementById('owner-view').classList.add('active');
-            document.getElementById('current-role-badge').innerText = "👑 Owner Management Mode";
-            document.getElementById('current-role-badge').style.color = "#ffc107";
-            document.getElementById('toggle-role-btn').innerText = "🔒 Lock to Cashier View";
-            document.getElementById('toggle-role-btn').className = "btn btn-danger";
-            renderProductLists();
-        } else {
-            alert("❌ Incorrect Passcode Pin. Access Denied.");
-        }
-    }
-
-    function closeLoginModal() {
-        document.getElementById('loginModal').style.display = 'none';
-    }
-
-    // --- CASHIER INTERFACE ENGINE ---
+    // --- BILLING LOGIC ---
     function lookupCustomer() {
-        let phone = document.getElementById('bill-phone').value.trim();
-        phone = phone.replace(/[^0-9]/g, ''); 
-        if (phone.length === 10) {
-            phone = '91' + phone;
-        }
+        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
+        if (phone.length === 10) phone = '91' + phone;
 
         const statusText = document.getElementById('customer-status');
         const nameInput = document.getElementById('bill-name');
         const areaInput = document.getElementById('bill-area');
-        const couponBox = document.getElemen
+
+        if (mockCustomers[phone]) {
+            statusText.innerText = `✨ Returning Customer Verified!`;
+            nameInput.value = mockCustomers[phone].name;
+            areaInput.value = mockCustomers[phone].area;
+        } else {
+            statusText.innerText = phone.length > 5 ? "🆕 New Customer Profile" : "";
+        }
+    }
+
+    function calculateTotal() {
+        let total = 0;
+        document.querySelectorAll('#cashier-product-list input[type="checkbox"]').forEach(box => {
+            if (box.checked) total += parseFloat(box.getAttribute('data-price'));
+        });
+        document.getElementById('bill-total').innerText = `₹${total.toFixed(2)}`;
+        return total;
+    }
+
+    function saveAndSendBill() {
+        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
+        const name = document.getElementById('bill-name').value.trim();
+        const area = document.getElementById('bill-area').value.trim();
+        const total = calculateTotal();
+
+        if (!phone || !name || total === 0) return alert("Fill all customer data and select items.");
+        if (phone.length === 10) phone = '91' + phone;
+
+        const billId = "BILL-" + Math.floor(100000 + Math.random() * 900000);
+        let itemsSummary = [];
+        document.querySelectorAll('#cashier-product-list input[type="checkbox"]').forEach(box => {
+            if (box.checked) {
+                const note = box.closest('.product-item').querySelector('.prod-note').value;
+                itemsSummary.push(`${box.value} ${note ? '['+note+']' : ''}`);
+            }
+        });
+
+        totalRevenue += total;
+        todaySales += total;
+        document.getElementById('dash-revenue').innerText = `₹${totalRevenue.toFixed(2)}`;
+        document.getElementById('dash-today-sales').innerText = `₹${todaySales.toFixed(2)}`;
+
+        const tbody = document.getElementById('history-table-body');
+        tbody.innerHTML = `<tr><td><strong>${billId}</strong></td><td>${new Date().toLocaleTimeString()}</td><td>${name} (${phone})</td><td>${itemsSummary.join(', ')}</td><td>₹${total}</td></tr>` + tbody.innerHTML;
+
+        const msg = `Hello ${name}, your invoice #${billId} is ready. Total: ₹${total}. Items: ${itemsSummary.join(', ')}`;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+        // Clear Form
+        document.getElementById('bill-phone').value = '';
+        document.getElementById('bill-name').value = '';
+        document.getElementById('bill-area').value = '';
+        document.querySelectorAll('#cashier-product-list input[type="checkbox"]').forEach(b => b.checked = false);
+        document.querySelectorAll('.prod-note').forEach(n => n.value = '');
+        document.getElementById('bill-total').innerText = "₹0.00";
+    }
+
+    function sendPromoWhatsApp() {
+        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
+        const name = document.getElementById('bill-name').value.trim();
+        if(!phone || !name) return alert("Provide client data first.");
+        if (phone.length === 10) phone = '91' + phone;
+
+        const msg = `Hi ${name}! Use your registered phone number ${phone} to get 10% off your next checkout!`;
+        window.open(`https://wa.me/${phone}
