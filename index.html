@@ -129,21 +129,13 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border-color); }
         th { background-color: #252525; }
-
-        /* Owner Login Modal Mock */
-        .login-box {
-            max-width: 400px; margin: 100px auto;
-            background: var(--card-bg); padding: 30px;
-            border-radius: 8px; border: 1px solid var(--border-color);
-            text-align: center;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.1 Split-View</span></h1>
+        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v1.2 INR</span></h1>
         <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
     </header>
 
@@ -168,7 +160,7 @@
             <!-- Left Side: Invoice Builder -->
             <div class="panel">
                 <div class="form-group">
-                    <label for="bill-phone">Customer Phone Number</label>
+                    <label for="bill-phone">Customer Phone Number (with Country Code, e.g., 919876543210)</label>
                     <input type="text" id="bill-phone" placeholder="Enter phone number..." oninput="lookupCustomer()">
                     <small id="customer-status" style="color: var(--accent-color); display:block; margin-top:5px;"></small>
                 </div>
@@ -180,21 +172,21 @@
 
                 <div class="form-group">
                     <label for="bill-area">Area/Location</label>
-                    <input type="text" id="bill-area" placeholder="e.g. Downtown">
+                    <input type="text" id="bill-area" placeholder="e.g. Mumbai South">
                 </div>
 
                 <h3>Select Products</h3>
                 <div class="product-select-list">
                     <div class="product-item">
-                        <label><input type="checkbox" value="Wireless Mouse" data-price="25.00" onchange="calculateTotal()"> Wireless Mouse ($25.00)</label>
+                        <label><input type="checkbox" value="Wireless Mouse" data-price="1200.00" onchange="calculateTotal()"> Wireless Mouse (₹1,200.00)</label>
                         <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
                     </div>
                     <div class="product-item">
-                        <label><input type="checkbox" value="Mechanical Keyboard" data-price="75.00" onchange="calculateTotal()"> Mechanical Keyboard ($75.00)</label>
+                        <label><input type="checkbox" value="Mechanical Keyboard" data-price="4500.00" onchange="calculateTotal()"> Mechanical Keyboard (₹4,500.00)</label>
                         <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
                     </div>
                     <div class="product-item">
-                        <label><input type="checkbox" value="HDMI Cable 2m" data-price="12.00" onchange="calculateTotal()"> HDMI Cable 2m ($12.00)</label>
+                        <label><input type="checkbox" value="HDMI Cable 2m" data-price="350.00" onchange="calculateTotal()"> HDMI Cable 2m (₹350.00)</label>
                         <input type="text" placeholder="Add notes..." class="prod-note" style="width: 35%; padding: 5px;">
                     </div>
                 </div>
@@ -205,18 +197,18 @@
                 </div>
 
                 <div style="font-size: 1.6rem; margin: 20px 0; font-weight: bold; text-align: right;">
-                    Total Due: <span id="bill-total" style="color: var(--success-color);">$0.00</span>
+                    Total Due: <span id="bill-total" style="color: var(--success-color);">₹0.00</span>
                 </div>
 
-                <button class="btn btn-success" style="width: 100%; font-size: 1.1rem;" onclick="generateAndSaveBill()">Generate & Save Bill</button>
+                <!-- NEW ACTION FLUIDITY: SAYS SAVE AND SEND INSTANTLY -->
+                <button class="btn btn-success" style="width: 100%; font-size: 1.2rem; padding: 15px;" onclick="saveAndSendBill()">💾 Save & Send Bill Via WhatsApp</button>
             </div>
 
-            <!-- Right Side: Cashier Actions & Messaging -->
+            <!-- Right Side: Secondary Actions -->
             <div class="panel">
-                <h3>💬 WhatsApp Integration</h3>
-                <p style="font-size: 0.85rem; color: #aaa;">Click below after generating a bill to text the invoice directly to the customer.</p>
-                <button class="btn" id="whatsapp-btn" disabled onclick="sendWhatsApp()" style="width: 100%; margin-bottom: 10px;">Send Receipt via WhatsApp</button>
-                <button class="btn" style="background-color: #555; width: 100%;" onclick="sendPromoWhatsApp()">Send Promo Offer</button>
+                <h3>📢 Quick Marketing</h3>
+                <p style="font-size: 0.85rem; color: #aaa;">Send custom introductory structures to your client data instantly.</p>
+                <button class="btn" style="background-color: #555; width: 100%;" onclick="sendPromoWhatsApp()">Send Promo Offer Discount</button>
 
                 <h3 style="margin-top: 30px;">🏷️ Active Coupon Status</h3>
                 <div id="coupon-status-box" style="background:#252525; padding: 12px; border-radius:4px; font-size:0.9rem;">
@@ -233,7 +225,7 @@
     <!-- ========================================== -->
     <div id="owner-view" class="view-section">
         
-        <!-- 📊 OWNER DASHBOARD MATRICS -->
+        <!-- 📊 OWNER DASHBOARD METRICS -->
         <h2>📊 Owner Management Dashboard</h2>
         <div class="dashboard-grid">
             <div class="card">
@@ -242,11 +234,11 @@
             </div>
             <div class="card">
                 <h3>Today's Live Sales</h3>
-                <div class="value" id="dash-today-sales">$0.00</div>
+                <div class="value" id="dash-today-sales">₹0.00</div>
             </div>
             <div class="card">
                 <h3>Total Safe Revenue</h3>
-                <div class="value" id="dash-revenue">$0.00</div>
+                <div class="value" id="dash-revenue">₹0.00</div>
             </div>
             <div class="card">
                 <h3>Repeat Customer Count</h3>
@@ -268,7 +260,7 @@
                     </tr>
                 </thead>
                 <tbody id="history-table-body">
-                    <!-- Securely populated dynamically -->
+                    <!-- Dynamic Rows Go Here -->
                 </tbody>
             </table>
         </div>
@@ -287,8 +279,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>9876543210</td><td>John Doe</td><td>North End</td><td>3</td><td>$150.00</td></tr>
-                    <tr><td>5551234567</td><td>Jane Smith</td><td>Westside</td><td>1</td><td>$45.00</td></tr>
+                    <tr><td>919876543210</td><td>John Doe</td><td>North End</td><td>3</td><td>₹4,500.00</td></tr>
+                    <tr><td>915551234567</td><td>Jane Smith</td><td>Westside</td><td>1</td><td>₹1,200.00</td></tr>
                 </tbody>
             </table>
         </div>
@@ -299,17 +291,16 @@
 <script>
     // System Configurations
     let currentRole = "cashier";
-    const OWNER_PASSWORD = "1234"; // Default Owner PIN
+    const OWNER_PASSWORD = "1234";
 
     // Mock Backend Database
     const mockCustomers = {
-        "9876543210": { name: "John Doe", area: "North End", visits: 3, spent: 150, couponStatus: "Claimed" },
-        "5551234567": { name: "Jane Smith", area: "Westside", visits: 1, spent: 45, couponStatus: "Sent" }
+        "919876543210": { name: "John Doe", area: "North End", visits: 3, spent: 4500, couponStatus: "Claimed" },
+        "915551234567": { name: "Jane Smith", area: "Westside", visits: 1, spent: 1200, couponStatus: "Sent" }
     };
 
     let totalRevenue = 0;
     let todaySales = 0;
-    let lastGeneratedBill = null;
 
     document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
 
@@ -329,7 +320,6 @@
                 alert("❌ Incorrect Passcode. Access Denied.");
             }
         } else {
-            // Lock back down to cashier mode instantly
             currentRole = "cashier";
             document.getElementById('owner-view').classList.remove('active');
             document.getElementById('cashier-view').classList.add('active');
@@ -375,14 +365,15 @@
         const couponEntered = document.getElementById('bill-coupon').value.trim();
         
         if (couponEntered && couponEntered === phone && mockCustomers[phone] && mockCustomers[phone].couponStatus === "Sent") {
-            total = total * 0.9; // Apply 10% structural markdown
+            total = total * 0.9; // 10% discount applied structurally
         }
 
-        document.getElementById('bill-total').innerText = `$${total.toFixed(2)}`;
+        document.getElementById('bill-total').innerText = `₹${total.toFixed(2)}`;
         return total;
     }
 
-    function generateAndSaveBill() {
+    // UPGRADED METHOD: SAVES INTERNALLY AND TRIPPERS WHATSAPP AT THE SAME INSTANT
+    function saveAndSendBill() {
         const phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
         const area = document.getElementById('bill-area').value.trim();
@@ -405,51 +396,42 @@
             }
         });
 
-        // Backend state updates (Behind the scenes)
+        // 1. Log metrics to Owner Backend Dashboard securely
         totalRevenue += total;
         todaySales += total;
         
-        document.getElementById('dash-revenue').innerText = `$${totalRevenue.toFixed(2)}`;
-        document.getElementById('dash-today-sales').innerText = `$${todaySales.toFixed(2)}`;
+        document.getElementById('dash-revenue').innerText = `₹${totalRevenue.toFixed(2)}`;
+        document.getElementById('dash-today-sales').innerText = `₹${todaySales.toFixed(2)}`;
 
-        // Update Secret Owner Log Row
+        // 2. Build row inside secure Owner history ledger
         const tbody = document.getElementById('history-table-body');
         const row = `<tr>
             <td><strong>${billId}</strong></td>
             <td>${dateTime}</td>
             <td>${name} (${phone})<br><small>${area}</small></td>
             <td>${itemsSummary.join(', ')}</td>
-            <td style="color: var(--success-color); font-weight:bold;">$${total.toFixed(2)}</td>
+            <td style="color: var(--success-color); font-weight:bold;">₹${total.toFixed(2)}</td>
         </tr>`;
         tbody.innerHTML = row + tbody.innerHTML;
 
-        // Unlock localized WhatsApp action
-        lastGeneratedBill = { billId, name, phone, total: total.toFixed(2), items: itemsSummary.join(', ') };
-        document.getElementById('whatsapp-btn').disabled = false;
+        // 3. Fire up WhatsApp message immediately in a clean new web view
+        const message = `Hello ${name}, thank you for shopping with us! Your invoice #${billId} has been generated successfully. Total Amount Due: ₹${total.toFixed(2)}. Items: ${itemsSummary.join(', ')}`;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
 
-        alert(`✅ System processed successfully! Bill ID: ${billId}`);
-        
-        // Reset Cashier Form fields safely
+        // 4. Safely clean up Cashier Workspace layout for next order entries
         document.getElementById('bill-phone').value = '';
         document.getElementById('bill-name').value = '';
         document.getElementById('bill-area').value = '';
         document.getElementById('bill-coupon').value = '';
         checkboxes.forEach(box => { box.checked = false; box.closest('.product-item').querySelector('.prod-note').value = ''; });
-        document.getElementById('bill-total').innerText = "$0.00";
-        document.getElementById('whatsapp-btn').disabled = true;
-    }
-
-    function sendWhatsApp() {
-        if (!lastGeneratedBill) return;
-        const message = `Hello ${lastGeneratedBill.name}, thank you for your purchase! Invoice #${lastGeneratedBill.billId} details total $${lastGeneratedBill.total}. Items: ${lastGeneratedBill.items}`;
-        window.open(`https://wa.me/${lastGeneratedBill.phone}?text=${encodeURIComponent(message)}`, '_blank');
+        document.getElementById('bill-total').innerText = "₹0.00";
     }
 
     function sendPromoWhatsApp() {
         const phone = document.getElementById('bill-phone').value.trim();
         const name = document.getElementById('bill-name').value.trim();
-        if(!phone || !name) { alert("Please input active client data."); return; }
-        const message = `Hi ${name}! Thank you for choosing us. Use your register phone digit ${phone} to claim 10% off your text trip!`;
+        if(!phone || !name) { alert("Please input active client phone and name information."); return; }
+        const message = `Hi ${name}! Thank you for choosing us. Use your register phone digit ${phone} to claim 10% off your next checkout!`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
     }
 </script>
