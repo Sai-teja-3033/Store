@@ -1,624 +1,703 @@
-/* =========================================================
-   HYYSHOOT — MOBILE DESIGN
-   Screenshot-matched mobile layout
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-  * {
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  body {
-    margin: 0;
-    background: #faf8ef;
-    color: #28251f;
-    font-family: Georgia, "Times New Roman", serif;
-  }
-
-  /* ---------- MAIN CONTAINER ---------- */
-
-  .container,
-  .site-container,
-  main {
-    width: 100%;
-    max-width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 0 auto;
-  }
-
-  section {
-    width: 100%;
-    margin: 0;
-    padding: 24px 0;
-  }
-
-  /* ---------- HEADER ---------- */
-
-  header {
-    width: 100%;
-    height: 52px;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #faf8ef;
-  }
-
-  .logo,
-  .brand {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: .2px;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-  }
-
-  .book-btn {
-    height: 25px;
-    padding: 0 13px;
-    border: 0;
-    border-radius: 20px;
-    background: #292822;
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 9px;
-    white-space: nowrap;
-  }
-
-  .menu-btn {
-    width: 22px;
-    height: 22px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    font-size: 17px;
-    line-height: 1;
-  }
-
-  /* ---------- HERO ---------- */
-
-  .hero {
-    min-height: 230px;
-    padding: 22px 10px 18px;
-    position: relative;
-  }
-
-  .hero-eyebrow {
-    margin-bottom: 7px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 7px;
-    font-weight: 600;
-    letter-spacing: 1.4px;
-    color: #aaa69a;
-  }
-
-  .hero h1 {
-    width: 215px;
-    margin: 0;
-    font-size: 25px;
-    line-height: .98;
-    font-weight: 500;
-    letter-spacing: -.7px;
-  }
-
-  .hero-description {
-    width: 145px;
-    margin-top: 14px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 8px;
-    line-height: 1.45;
-    color: #89867d;
-  }
-
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: 12px;
-  }
-
-  .hero-primary {
-    height: 25px;
-    padding: 0 11px;
-    border: 0;
-    border-radius: 20px;
-    background: #292822;
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-  }
-
-  .hero-play {
-    width: 21px;
-    height: 21px;
-    border: 1px solid #d2cec3;
-    border-radius: 50%;
-    background: transparent;
-    font-size: 7px;
-  }
-
-  .hero-watch {
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-  }
-
-  /* HERO IMAGE */
-
-  .hero-image {
-    position: absolute;
-    right: 13px;
-    top: 76px;
-    width: 78px;
-    height: 95px;
-    border-radius: 7px;
-    background: #9b8e76;
-    border: 3px solid white;
-    box-shadow: 0 2px 5px rgba(0,0,0,.16);
-    transform: rotate(3deg);
-    overflow: hidden;
-  }
-
-  .hero-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-
-  /* =========================================================
-     SECTION HEADINGS
-     ========================================================= */
-
-  .section-heading {
-    padding: 0 10px;
-    margin-bottom: 12px;
-  }
-
-  .section-heading h2 {
-    margin: 0;
-    font-size: 20px;
-    line-height: 1;
-    font-weight: 500;
-    letter-spacing: -.3px;
-  }
-
-  .section-heading p {
-    margin: 4px 0 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 8px;
-    color: #a09c91;
-  }
-
-
-  /* =========================================================
-     SERVICES
-     ========================================================= */
-
-  .services-section {
-    padding-top: 10px;
-    padding-bottom: 24px;
-  }
-
-  .services-track {
-    display: flex;
-    gap: 7px;
-    overflow-x: auto;
-    padding: 0 10px 2px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .services-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .service-card {
-    flex: 0 0 calc(100vw - 31px);
-    min-height: 155px;
-    padding: 12px;
-    border-radius: 12px;
-    background: #fff;
-    border: 1px solid #f1eee7;
-    scroll-snap-align: start;
-  }
-
-  .service-icon {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    background: #fafafa;
-    font-size: 11px;
-  }
-
-  .service-card h3 {
-    margin: 0 0 7px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 9px;
-    font-weight: 500;
-  }
-
-  .service-card p {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 7px;
-    line-height: 1.5;
-    color: #858179;
-  }
-
-  .carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    margin-top: 13px;
-  }
-
-  .carousel-dots span {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #d5d0c4;
-  }
-
-  .carousel-dots span.active {
-    background: #28251f;
-  }
-
-
-  /* =========================================================
-     PORTFOLIO
-     ========================================================= */
-
-  .portfolio-section {
-    padding-top: 18px;
-  }
-
-  .portfolio-track {
-    display: flex;
-    gap: 7px;
-    overflow-x: auto;
-    padding: 0 10px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .portfolio-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .portfolio-card {
-    flex: 0 0 calc((100vw - 27px) / 2);
-    height: 228px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    background: #39485a;
-    scroll-snap-align: start;
-  }
-
-  .portfolio-card img,
-  .portfolio-card video {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-  }
-
-  .portfolio-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 55%,
-      rgba(0,0,0,.42)
-    );
-    pointer-events: none;
-  }
-
-  .video-duration {
-    position: absolute;
-    top: 8px;
-    right: 7px;
-    z-index: 2;
-    padding: 2px 4px;
-    border-radius: 3px;
-    background: rgba(0,0,0,.45);
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 6px;
-  }
-
-  .play-circle {
-    position: absolute;
-    z-index: 3;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 27px;
-    height: 27px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255,255,255,.8);
-    border-radius: 50%;
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-  }
-
-  .portfolio-title {
-    position: absolute;
-    z-index: 3;
-    left: 8px;
-    bottom: 8px;
-    right: 8px;
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 7px;
-    line-height: 1.25;
-  }
-
-
-  /* =========================================================
-     PRICING
-     ========================================================= */
-
-  .pricing-section {
-    padding-top: 25px;
-  }
-
-  .pricing-track {
-    display: flex;
-    gap: 7px;
-    overflow-x: auto;
-    padding: 0 10px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .pricing-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .price-card {
-    flex: 0 0 100px;
-    min-height: 126px;
-    padding: 10px;
-    position: relative;
-    border-radius: 10px;
-    background: #fff;
-    border: 1px solid #f0ece3;
-    scroll-snap-align: start;
-  }
-
-  .price-card.popular {
-    border: 2px solid #d4b75e;
-  }
-
-  .popular-label {
-    position: absolute;
-    top: 6px;
-    left: 8px;
-    padding: 2px 5px;
-    border-radius: 5px;
-    background: #38362f;
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 5px;
-  }
-
-  .price-card h3 {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-    font-weight: 500;
-  }
-
-  .price {
-    margin-top: 3px;
-    margin-bottom: 9px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  .price-card ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-family: Arial, sans-serif;
-    font-size: 6px;
-    line-height: 1.7;
-    color: #77736b;
-  }
-
-  .price-card li::before {
-    content: "• ";
-  }
-
-
-  /* =========================================================
-     TESTIMONIALS
-     ========================================================= */
-
-  .testimonials-section {
-    padding-top: 27px;
-    padding-bottom: 20px;
-  }
-
-  .testimonial {
-    margin: 0 10px 8px;
-    padding: 14px 12px;
-    min-height: 89px;
-    border-radius: 11px;
-    background: white;
-    border: 1px solid #f0ece3;
-  }
-
-  .quote {
-    margin-bottom: 7px;
-    color: #b59b4d;
-    font-size: 13px;
-  }
-
-  .testimonial p {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 7px;
-    line-height: 1.5;
-    color: #555149;
-  }
-
-  .testimonial-author {
-    margin-top: 7px;
-    font-family: Arial, sans-serif;
-    font-size: 6px;
-    color: #8d897f;
-  }
-
-  .stars {
-    color: #b59b4d;
-    letter-spacing: 1px;
-  }
-
-
-  /* =========================================================
-     HIRING
-     ========================================================= */
-
-  .hiring-section {
-    margin-top: 0;
-    padding: 18px 10px 25px;
-    background: #f2eadb;
-  }
-
-  .hiring-eyebrow {
-    margin-bottom: 3px;
-    font-family: Arial, sans-serif;
-    font-size: 6px;
-    letter-spacing: 1px;
-    color: #aaa193;
-  }
-
-  .hiring-section h2 {
-    margin: 0;
-    font-size: 19px;
-    font-weight: 500;
-  }
-
-  .hiring-description {
-    width: 230px;
-    margin: 5px 0 11px;
-    font-family: Arial, sans-serif;
-    font-size: 7px;
-    line-height: 1.4;
-    color: #8c877d;
-  }
-
-  .job-card {
-    min-height: 43px;
-    margin-bottom: 6px;
-    padding: 8px 9px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 8px;
-    background: white;
-  }
-
-  .job-title {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-    font-weight: 500;
-  }
-
-  .job-type {
-    margin-top: 2px;
-    font-family: Arial, sans-serif;
-    font-size: 6px;
-    color: #9a958b;
-  }
-
-  .apply-btn {
-    height: 23px;
-    padding: 0 10px;
-    border: 1px solid #7e7a72;
-    border-radius: 15px;
-    background: white;
-    font-family: Arial, sans-serif;
-    font-size: 7px;
-  }
-
-
-  /* =========================================================
-     HORIZONTAL SECTION INDICATORS
-     ========================================================= */
-
-  .horizontal-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 8px 10px 0;
-  }
-
-  .horizontal-indicator::before {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #d9d4c9;
-  }
-
-  .horizontal-indicator::after {
-    content: "›";
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    color: #77736b;
-  }
-
-
-  /* =========================================================
-     HIDE DESKTOP ELEMENTS
-     ========================================================= */
-
-  .desktop-only,
-  .desktop-nav,
-  .desktop-menu {
-    display: none !important;
-  }
-
-
-  /* =========================================================
-     PREVENT OVERSIZED TEXT / IMAGES
-     ========================================================= */
-
-  img,
-  video {
-    max-width: 100%;
-  }
-
-  h1,
-  h2,
-  h3,
-  p {
-    overflow-wrap: normal;
-  }
-}
+An interactive HTML preview matching your CSS specification. Save and open this in a browser, or preview it directly in a mobile viewport (under 600px width):
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyyshoot — Mobile Preview</title>
+  <style>
+    /* =========================================================
+       HYYSHOOT — MOBILE DESIGN
+       ========================================================= */
+    @media (max-width: 600px) {
+      * { box-sizing: border-box; }
+
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        margin: 0;
+        background: #faf8ef;
+        color: #28251f;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      .container, .site-container, main {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0 auto;
+      }
+
+      section {
+        width: 100%;
+        margin: 0;
+        padding: 24px 0;
+      }
+
+      header {
+        width: 100%;
+        height: 52px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #faf8ef;
+      }
+
+      .logo, .brand {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: .2px;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+
+      .book-btn {
+        height: 25px;
+        padding: 0 13px;
+        border: 0;
+        border-radius: 20px;
+        background: #292822;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        white-space: nowrap;
+      }
+
+      .menu-btn {
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        font-size: 17px;
+        line-height: 1;
+      }
+
+      .hero {
+        min-height: 230px;
+        padding: 22px 10px 18px;
+        position: relative;
+      }
+
+      .hero-eyebrow {
+        margin-bottom: 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 7px;
+        font-weight: 600;
+        letter-spacing: 1.4px;
+        color: #aaa69a;
+      }
+
+      .hero h1 {
+        width: 215px;
+        margin: 0;
+        font-size: 25px;
+        line-height: .98;
+        font-weight: 500;
+        letter-spacing: -.7px;
+      }
+
+      .hero-description {
+        width: 145px;
+        margin-top: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 8px;
+        line-height: 1.45;
+        color: #89867d;
+      }
+
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 12px;
+      }
+
+      .hero-primary {
+        height: 25px;
+        padding: 0 11px;
+        border: 0;
+        border-radius: 20px;
+        background: #292822;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+      }
+
+      .hero-play {
+        width: 21px;
+        height: 21px;
+        border: 1px solid #d2cec3;
+        border-radius: 50%;
+        background: transparent;
+        font-size: 7px;
+      }
+
+      .hero-watch {
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+      }
+
+      .hero-image {
+        position: absolute;
+        right: 13px;
+        top: 76px;
+        width: 78px;
+        height: 95px;
+        border-radius: 7px;
+        background: #9b8e76;
+        border: 3px solid white;
+        box-shadow: 0 2px 5px rgba(0,0,0,.16);
+        transform: rotate(3deg);
+        overflow: hidden;
+      }
+
+      .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .section-heading {
+        padding: 0 10px;
+        margin-bottom: 12px;
+      }
+
+      .section-heading h2 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: -.3px;
+      }
+
+      .section-heading p {
+        margin: 4px 0 0;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 8px;
+        color: #a09c91;
+      }
+
+      .services-section {
+        padding-top: 10px;
+        padding-bottom: 24px;
+      }
+
+      .services-track {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        padding: 0 10px 2px;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+      }
+
+      .services-track::-webkit-scrollbar { display: none; }
+
+      .service-card {
+        flex: 0 0 calc(100vw - 31px);
+        min-height: 155px;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #f1eee7;
+        scroll-snap-align: start;
+      }
+
+      .service-icon {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 7px;
+        background: #fafafa;
+        font-size: 11px;
+      }
+
+      .service-card h3 {
+        margin: 0 0 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9px;
+        font-weight: 500;
+      }
+
+      .service-card p {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 7px;
+        line-height: 1.5;
+        color: #858179;
+      }
+
+      .carousel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+        margin-top: 13px;
+      }
+
+      .carousel-dots span {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #d5d0c4;
+      }
+
+      .carousel-dots span.active { background: #28251f; }
+
+      .portfolio-section { padding-top: 18px; }
+
+      .portfolio-track {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        padding: 0 10px;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+      }
+
+      .portfolio-track::-webkit-scrollbar { display: none; }
+
+      .portfolio-card {
+        flex: 0 0 calc((100vw - 27px) / 2);
+        height: 228px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        background: #39485a;
+        scroll-snap-align: start;
+      }
+
+      .portfolio-card img, .portfolio-card video {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .portfolio-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,.42));
+        pointer-events: none;
+      }
+
+      .video-duration {
+        position: absolute;
+        top: 8px;
+        right: 7px;
+        z-index: 2;
+        padding: 2px 4px;
+        border-radius: 3px;
+        background: rgba(0,0,0,.45);
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 6px;
+      }
+
+      .play-circle {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 27px;
+        height: 27px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,255,255,.8);
+        border-radius: 50%;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+      }
+
+      .portfolio-title {
+        position: absolute;
+        z-index: 3;
+        left: 8px;
+        bottom: 8px;
+        right: 8px;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 7px;
+        line-height: 1.25;
+      }
+
+      .pricing-section { padding-top: 25px; }
+
+      .pricing-track {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        padding: 0 10px;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+      }
+
+      .pricing-track::-webkit-scrollbar { display: none; }
+
+      .price-card {
+        flex: 0 0 100px;
+        min-height: 126px;
+        padding: 10px;
+        position: relative;
+        border-radius: 10px;
+        background: #fff;
+        border: 1px solid #f0ece3;
+        scroll-snap-align: start;
+      }
+
+      .price-card.popular { border: 2px solid #d4b75e; }
+
+      .popular-label {
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        padding: 2px 5px;
+        border-radius: 5px;
+        background: #38362f;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 5px;
+      }
+
+      .price-card h3 {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        font-weight: 500;
+      }
+
+      .price {
+        margin-top: 3px;
+        margin-bottom: 9px;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .price-card ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-family: Arial, sans-serif;
+        font-size: 6px;
+        line-height: 1.7;
+        color: #77736b;
+      }
+
+      .price-card li::before { content: "• "; }
+
+      .testimonials-section {
+        padding-top: 27px;
+        padding-bottom: 20px;
+      }
+
+      .testimonial {
+        margin: 0 10px 8px;
+        padding: 14px 12px;
+        min-height: 89px;
+        border-radius: 11px;
+        background: white;
+        border: 1px solid #f0ece3;
+      }
+
+      .quote {
+        margin-bottom: 7px;
+        color: #b59b4d;
+        font-size: 13px;
+      }
+
+      .testimonial p {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        font-size: 7px;
+        line-height: 1.5;
+        color: #555149;
+      }
+
+      .testimonial-author {
+        margin-top: 7px;
+        font-family: Arial, sans-serif;
+        font-size: 6px;
+        color: #8d897f;
+      }
+
+      .stars {
+        color: #b59b4d;
+        letter-spacing: 1px;
+      }
+
+      .hiring-section {
+        margin-top: 0;
+        padding: 18px 10px 25px;
+        background: #f2eadb;
+      }
+
+      .hiring-eyebrow {
+        margin-bottom: 3px;
+        font-family: Arial, sans-serif;
+        font-size: 6px;
+        letter-spacing: 1px;
+        color: #aaa193;
+      }
+
+      .hiring-section h2 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 500;
+      }
+
+      .hiring-description {
+        width: 230px;
+        margin: 5px 0 11px;
+        font-family: Arial, sans-serif;
+        font-size: 7px;
+        line-height: 1.4;
+        color: #8c877d;
+      }
+
+      .job-card {
+        min-height: 43px;
+        margin-bottom: 6px;
+        padding: 8px 9px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 8px;
+        background: white;
+      }
+
+      .job-title {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        font-weight: 500;
+      }
+
+      .job-type {
+        margin-top: 2px;
+        font-family: Arial, sans-serif;
+        font-size: 6px;
+        color: #9a958b;
+      }
+
+      .apply-btn {
+        height: 23px;
+        padding: 0 10px;
+        border: 1px solid #7e7a72;
+        border-radius: 15px;
+        background: white;
+        font-family: Arial, sans-serif;
+        font-size: 7px;
+      }
+
+      .horizontal-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 8px 10px 0;
+      }
+
+      .horizontal-indicator::before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #d9d4c9;
+      }
+
+      .horizontal-indicator::after {
+        content: "›";
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        color: #77736b;
+      }
+
+      .desktop-only, .desktop-nav, .desktop-menu {
+        display: none !important;
+      }
+
+      img, video { max-width: 100%; }
+      h1, h2, h3, p { overflow-wrap: normal; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">HYYSHOOT</div>
+    <div class="header-right">
+      <button class="book-btn">Book Shoot</button>
+      <button class="menu-btn" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">CREATIVE STUDIO</div>
+      <h1>Visuals that define your brand.</h1>
+      <p class="hero-description">We produce cinematic visuals, photography, and brand experiences tailored for modern audiences.</p>
+      
+      <div class="hero-actions">
+        <button class="hero-primary">Explore Work</button>
+        <button class="hero-play">▶</button>
+        <span class="hero-watch">Watch Reel</span>
+      </div>
+
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Studio hero visual">
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section class="services-section">
+      <div class="section-heading">
+        <h2>Services</h2>
+        <p>Tailored production for modern needs</p>
+      </div>
+
+      <div class="services-track">
+        <article class="service-card">
+          <div class="service-icon">✦</div>
+          <h3>Brand Photography</h3>
+          <p>High-end commercial portraits and lifestyle shoots crafted to reflect core aesthetic identity.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">▶</div>
+          <h3>Video Production</h3>
+          <p>Cinematic narrative storytelling, promotional cuts, and social-first video formats.</p>
+        </article>
+      </div>
+
+      <div class="carousel-dots">
+        <span class="active"></span>
+        <span></span>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section class="portfolio-section">
+      <div class="section-heading">
+        <h2>Selected Work</h2>
+        <p>Recent editorial & commercial commissions</p>
+      </div>
+
+      <div class="portfolio-track">
+        <article class="portfolio-card">
+          <span class="video-duration">0:45</span>
+          <span class="play-circle">▶</span>
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80" alt="Portfolio 1">
+          <div class="portfolio-title">AURA — Spring Lookbook</div>
+        </article>
+        <article class="portfolio-card">
+          <span class="video-duration">1:12</span>
+          <span class="play-circle">▶</span>
+          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80" alt="Portfolio 2">
+          <div class="portfolio-title">KINETIC — Editorial</div>
+        </article>
+      </div>
+
+      <div class="horizontal-indicator"></div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing-section">
+      <div class="section-heading">
+        <h2>Packages</h2>
+        <p>Clear options for every campaign scale</p>
+      </div>
+
+      <div class="pricing-track">
+        <article class="price-card">
+          <h3>Starter</h3>
+          <div class="price">$450</div>
+          <ul>
+            <li>Half-day shoot</li>
+            <li>10 retouched photos</li>
+            <li>48h turnaround</li>
+          </ul>
+        </article>
+
+        <article class="price-card popular">
+          <span class="popular-label">POPULAR</span>
+          <h3 style="margin-top: 10px;">Full Production</h3>
+          <div class="price">$1,200</div>
+          <ul>
+            <li>Full-day shoot</li>
+            <li>35 master edits</li>
+            <li>60s reel included</li>
+          </ul>
+        </article>
+
+        <article class="price-card">
+          <h3>Campaign</h3>
+          <div class="price">$2,800</div>
+          <ul>
+            <li>Multi-location</li>
+            <li>Unlimited raw files</li>
+            <li>Art direction</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials-section">
+      <div class="section-heading">
+        <h2>Client Voice</h2>
+        <p>Trusted by industry leaders</p>
+      </div>
+
+      <div class="testimonial">
+        <div class="quote">“</div>
+        <p>The attention to texture, light, and narrative completely redefined how our fall collection was perceived by retail buyers.</p>
+        <div class="testimonial-author">
+          Elena Rostova — <span class="stars">★★★★★</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- HIRING -->
+    <section class="hiring-section">
+      <div class="hiring-eyebrow">JOIN OUR CREW</div>
+      <h2>We're Hiring</h2>
+      <p class="hiring-description">Looking for curious minds pushing boundaries across set design and post-production.</p>
+
+      <div class="job-card">
+        <div>
+          <h4 class="job-title">Colorist & Video Editor</h4>
+          <div class="job-type">Full-time · Remote</div>
+        </div>
+        <button class="apply-btn">Apply</button>
+      </div>
+
+      <div class="job-card">
+        <div>
+          <h4 class="job-title">Set Lighting Technician</h4>
+          <div class="job-type">Contract · Berlin / Studio</div>
+        </div>
+        <button class="apply-btn">Apply</button>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
