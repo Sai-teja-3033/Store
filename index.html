@@ -1,478 +1,624 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Management & Billing System</title>
-    <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --accent-color: #00adb5;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --border-color: #333;
-        }
+/* =========================================================
+   HYYSHOOT — MOBILE DESIGN
+   Screenshot-matched mobile layout
+   ========================================================= */
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
+@media (max-width: 600px) {
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+  * {
+    box-sizing: border-box;
+  }
 
-        header {
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
-        h1, h2, h3 { color: #fff; margin-top: 0; }
+  body {
+    margin: 0;
+    background: #faf8ef;
+    color: #28251f;
+    font-family: Georgia, "Times New Roman", serif;
+  }
 
-        .btn {
-            background-color: var(--accent-color);
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn:hover { opacity: 0.9; }
-        .btn-success { background-color: var(--success-color); }
-        .btn-danger { background-color: var(--danger-color); }
+  /* ---------- MAIN CONTAINER ---------- */
 
-        .role-nav {
-            background-color: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+  .container,
+  .site-container,
+  main {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0 auto;
+  }
 
-        /* Billing Layout Split */
-        .billing-workspace {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
+  section {
+    width: 100%;
+    margin: 0;
+    padding: 24px 0;
+  }
 
-        @media (max-width: 768px) {
-            .billing-workspace { grid-template-columns: 1fr; }
-        }
+  /* ---------- HEADER ---------- */
 
-        .panel {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
+  header {
+    width: 100%;
+    height: 52px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #faf8ef;
+  }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #ccc; }
-        input, select, textarea {
-            width: 100%; padding: 10px; box-sizing: border-box;
-            background-color: #2d2d2d; border: 1px solid var(--border-color);
-            color: #fff; border-radius: 4px;
-        }
-        input:focus { outline: none; border-color: var(--accent-color); }
+  .logo,
+  .brand {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .2px;
+  }
 
-        .product-select-list {
-            max-height: 280px; overflow-y: auto;
-            border: 1px solid var(--border-color); padding: 10px;
-            border-radius: 4px; margin-bottom: 15px;
-        }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
 
-        .product-item {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1.5fr;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #2d2d2d;
-        }
-        .product-item label { margin: 0; display: flex; align-items: center; }
-        .product-item input[type="checkbox"] { width: auto; margin-right: 10px; }
-        .product-item .qty-input { width: 70px; padding: 5px; text-align: center; }
+  .book-btn {
+    height: 25px;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 20px;
+    background: #292822;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    white-space: nowrap;
+  }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border-color); }
-        th { background-color: #252525; }
+  .menu-btn {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 17px;
+    line-height: 1;
+  }
 
-        .inline-form {
-            display: flex; gap: 10px; margin-bottom: 15px;
-        }
-    </style>
-</head>
-<body>
+  /* ---------- HERO ---------- */
 
-<div class="container">
-    <header>
-        <h1>Store Manager Pro <span style="font-size: 0.8rem; color: var(--accent-color);">v2.3 Production Stable</span></h1>
-        <div id="live-clock" style="font-weight: bold; color: #aaa;"></div>
-    </header>
+  .hero {
+    min-height: 230px;
+    padding: 22px 10px 18px;
+    position: relative;
+  }
 
-    <!-- 🧭 TOP ACCESS NAVIGATION BAR -->
-    <div class="role-nav">
-        <div>
-            <span style="font-weight: bold;">Current Workspace: </span>
-            <span id="current-role-badge" style="background: #333; padding: 5px 10px; border-radius: 4px; color: var(--accent-color); font-weight: bold;">🛒 CASHIER VIEW</span>
-        </div>
-        
-        <!-- Login Form Wrapper Elements -->
-        <form id="login-form" onsubmit="checkOwnerLogin(event);" style="display: flex; gap: 10px; align-items: center; margin: 0;">
-            <input type="password" id="owner-pin-input" placeholder="Enter Owner PIN (1234)" style="width: 180px; padding: 8px;" required>
-            <button type="submit" class="btn">Go to Owner Mode</button>
-        </form>
-        
-        <!-- Logout Button Layout Elements -->
-        <div id="logout-controls" style="display: none;">
-            <button type="button" class="btn btn-danger" onclick="returnToCashier()">🔒 Lock back to Cashier</button>
-        </div>
-    </div>
+  .hero-eyebrow {
+    margin-bottom: 7px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    color: #aaa69a;
+  }
 
-    <!-- ========================================== -->
-    <!-- 🛒 CASHIER WORKSPACE CONTAINER             -->
-    <!-- ========================================== -->
-    <div id="cashier-view" style="display: block;">
-        <h2>🧾 Cashier Billing Desk</h2>
-        <div class="billing-workspace">
-            
-            <div class="panel">
-                <div class="form-group">
-                    <label for="bill-phone">Customer Phone Number (e.g., 6303779868)</label>
-                    <input type="text" id="bill-phone" placeholder="Enter phone number..." oninput="lookupCustomer()">
-                    <small id="customer-status" style="color: var(--accent-color); display:block; margin-top:5px;"></small>
-                </div>
+  .hero h1 {
+    width: 215px;
+    margin: 0;
+    font-size: 25px;
+    line-height: .98;
+    font-weight: 500;
+    letter-spacing: -.7px;
+  }
 
-                <div class="form-group">
-                    <label for="bill-name">Customer Name</label>
-                    <input type="text" id="bill-name" placeholder="Name auto-loads or enter new...">
-                </div>
+  .hero-description {
+    width: 145px;
+    margin-top: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    line-height: 1.45;
+    color: #89867d;
+  }
 
-                <div class="form-group">
-                    <label for="bill-area">Area/Location</label>
-                    <input type="text" id="bill-area" placeholder="e.g. Hyderabad East">
-                </div>
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 12px;
+  }
 
-                <h3>Select Products & Quantities</h3>
-                <div class="product-select-list" id="cashier-product-list"></div>
+  .hero-primary {
+    height: 25px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 20px;
+    background: #292822;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+  }
 
-                <div style="font-size: 1.6rem; margin: 20px 0; font-weight: bold; text-align: right;">
-                    Total Due: <span id="bill-total" style="color: var(--success-color);">₹0.00</span>
-                </div>
+  .hero-play {
+    width: 21px;
+    height: 21px;
+    border: 1px solid #d2cec3;
+    border-radius: 50%;
+    background: transparent;
+    font-size: 7px;
+  }
 
-                <button type="button" class="btn btn-success" style="width: 100%; font-size: 1.2rem; padding: 15px;" onclick="saveAndSendBill()">💾 Save & Send Bill Via WhatsApp</button>
-            </div>
+  .hero-watch {
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+  }
 
-            <div class="panel">
-                <h3>📢 Quick Marketing</h3>
-                <p style="font-size: 0.85rem; color: #aaa;">Send custom introductory promos to clients instantly.</p>
-                <button type="button" class="btn" style="background-color: #555; width: 100%;" onclick="sendPromoWhatsApp()">Send Promo Offer Discount</button>
-            </div>
+  /* HERO IMAGE */
 
-        </div>
-    </div>
+  .hero-image {
+    position: absolute;
+    right: 13px;
+    top: 76px;
+    width: 78px;
+    height: 95px;
+    border-radius: 7px;
+    background: #9b8e76;
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,.16);
+    transform: rotate(3deg);
+    overflow: hidden;
+  }
 
-    <!-- ========================================== -->
-    <!-- 👑 OWNER SECURE CONTROL VIEW PANEL         -->
-    <!-- ========================================== -->
-    <div id="owner-view" style="display: none;">
-        
-        <h2>📊 Owner Management Dashboard</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px;">
-            <div class="card">
-                <h3>Total Customers</h3>
-                <div class="value" id="dash-customers">2</div>
-            </div>
-            <div class="card">
-                <h3>Today's Live Sales</h3>
-                <div class="value" id="dash-today-sales">₹0.00</div>
-            </div>
-            <div class="card">
-                <h3>Total Revenue</h3>
-                <div class="value" id="dash-revenue">₹0.00</div>
-            </div>
-            <div class="card">
-                <h3>Repeat Customers</h3>
-                <div class="value" id="dash-repeats">0</div>
-            </div>
-        </div>
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-        <h2>📦 Product Catalogue Management</h2>
-        <div class="panel">
-            <h3>Add New Item</h3>
-            <div class="inline-form">
-                <input type="text" id="new-prod-name" placeholder="Item Name">
-                <input type="number" id="new-prod-price" placeholder="Price (₹)">
-                <button type="button" class="btn btn-success" onclick="addNewProduct()">➕ Add Item</button>
-            </div>
-            
-            <h3>Active Inventory Items</h3>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Price (₹)</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="catalogue-table-body"></tbody>
-                </table>
-            </div>
-        </div>
 
-        <h2>📜 Sales Audit Logs & Bill History</h2>
-        <div class="panel" style="overflow-x: auto;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Bill ID</th>
-                        <th>Time</th>
-                        <th>Customer Profile</th>
-                        <th>Items Purchased (Qty)</th>
-                        <th>Total Amount</th>
-                    </tr>
-                </thead>
-                <tbody id="history-table-body"></tbody>
-            </table>
-        </div>
-    </div>
+  /* =========================================================
+     SECTION HEADINGS
+     ========================================================= */
 
-</div>
+  .section-heading {
+    padding: 0 10px;
+    margin-bottom: 12px;
+  }
 
-<script>
-    const CORRECT_PIN = "1234";
+  .section-heading h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -.3px;
+  }
 
-    let productCatalogue = [
-        { id: 1, name: "Wireless Mouse", price: 1200.00 },
-        { id: 2, name: "Mechanical Keyboard", price: 4500.00 },
-        { id: 3, name: "HDMI Cable 2m", price: 350.00 }
-    ];
+  .section-heading p {
+    margin: 4px 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    color: #a09c91;
+  }
 
-    const mockCustomers = {
-        "919876543210": { name: "John Doe", area: "North End", visits: 3, spent: 4500 },
-        "915551234567": { name: "Jane Smith", area: "Westside", visits: 1, spent: 1200 }
-    };
 
-    let totalRevenue = 0;
-    let todaySales = 0;
+  /* =========================================================
+     SERVICES
+     ========================================================= */
 
-    // Load initial structures securely
-    document.getElementById('live-clock').innerText = new Date().toLocaleDateString();
-    renderProductLists();
+  .services-section {
+    padding-top: 10px;
+    padding-bottom: 24px;
+  }
 
-    // --- WORKSPACE VIEW ROUTERS ---
-    function checkOwnerLogin(event) {
-        if(event) event.preventDefault();
-        const inputPin = document.getElementById('owner-pin-input').value.trim();
-        
-        if (inputPin === CORRECT_PIN) {
-            document.getElementById('cashier-view').style.display = 'none';
-            document.getElementById('owner-view').style.display = 'block';
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('logout-controls').style.display = 'block';
-            
-            const badge = document.getElementById('current-role-badge');
-            badge.innerText = "👑 OWNER ADMIN VIEW";
-            badge.style.color = "#ffc107";
-            
-            renderProductLists();
-        } else {
-            alert("❌ Incorrect Security PIN code.");
-        }
-    }
+  .services-track {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 0 10px 2px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
 
-    function returnToCashier() {
-        document.getElementById('owner-view').style.display = 'none';
-        document.getElementById('cashier-view').style.display = 'block';
-        document.getElementById('login-form').style.display = 'flex';
-        document.getElementById('logout-controls').style.display = 'none';
-        document.getElementById('owner-pin-input').value = '';
-        
-        const badge = document.getElementById('current-role-badge');
-        badge.innerText = "🛒 CASHIER VIEW";
-        badge.style.color = "var(--accent-color)";
-        
-        renderProductLists();
-    }
+  .services-track::-webkit-scrollbar {
+    display: none;
+  }
 
-    // --- CATALOGUE MANAGER ENGINE ---
-    function renderProductLists() {
-        const cashierContainer = document.getElementById('cashier-product-list');
-        if(cashierContainer) {
-            cashierContainer.innerHTML = '';
-            productCatalogue.forEach((prod, index) => {
-                cashierContainer.innerHTML += `
-                    <div class="product-item">
-                        <label>
-                            <input type="checkbox" id="prod-check-${index}" value="${prod.name}" data-price="${prod.price}" onchange="calculateTotal()"> 
-                            ${prod.name} (₹${prod.price})
-                        </label>
-                        <div>
-                            <input type="number" id="prod-qty-${index}" class="qty-input" value="1" min="1" oninput="calculateTotal()">
-                        </div>
-                        <input type="text" placeholder="Notes..." class="prod-note" id="prod-note-${index}" style="width: 90%; padding: 5px; background: #2d2d2d; border: 1px solid #444; color: #fff; border-radius: 4px;">
-                    </div>`;
-            });
-        }
+  .service-card {
+    flex: 0 0 calc(100vw - 31px);
+    min-height: 155px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #f1eee7;
+    scroll-snap-align: start;
+  }
 
-        const catalogueContainer = document.getElementById('catalogue-table-body');
-        if(catalogueContainer) {
-            catalogueContainer.innerHTML = '';
-            productCatalogue.forEach(prod => {
-                catalogueContainer.innerHTML += `
-                    <tr>
-                        <td><input type="text" value="${prod.name}" id="edit-name-${prod.id}" style="width:90%; padding:5px; background:#2d2d2d; color:#fff; border:1px solid #444;"></td>
-                        <td><input type="number" value="${prod.price}" id="edit-price-${prod.id}" style="width:100px; padding:5px; background:#2d2d2d; color:#fff; border:1px solid #444;"></td>
-                        <td>
-                            <button type="button" class="btn btn-success" style="padding:4px 8px; font-size:12px;" onclick="updateProduct(${prod.id})">Save</button>
-                            <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:12px;" onclick="deleteProduct(${prod.id})">Del</button>
-                        </td>
-                    </tr>`;
-            });
-        }
-    }
+  .service-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: #fafafa;
+    font-size: 11px;
+  }
 
-    function addNewProduct() {
-        const name = document.getElementById('new-prod-name').value.trim();
-        const price = parseFloat(document.getElementById('new-prod-price').value);
-        if (!name || isNaN(price)) return alert("Enter valid item details");
+  .service-card h3 {
+    margin: 0 0 7px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+  }
 
-        const newId = Date.now();
-        productCatalogue.push({ id: newId, name: name, price: price });
-        document.getElementById('new-prod-name').value = '';
-        document.getElementById('new-prod-price').value = '';
-        renderProductLists();
-    }
+  .service-card p {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    line-height: 1.5;
+    color: #858179;
+  }
 
-    function updateProduct(id) {
-        const n = document.getElementById(`edit-name-${id}`).value.trim();
-        const p = parseFloat(document.getElementById(`edit-price-${id}`).value);
-        const item = productCatalogue.find(x => x.id === id);
-        if(item) { 
-            item.name = n; 
-            item.price = p; 
-            renderProductLists(); 
-            alert("Catalogue Updated!"); 
-        }
-    }
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 13px;
+  }
 
-    function deleteProduct(id) {
-        productCatalogue = productCatalogue.filter(x => x.id !== id);
-        renderProductLists();
-    }
+  .carousel-dots span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #d5d0c4;
+  }
 
-    // --- BILLING MECHANICS ---
-    function lookupCustomer() {
-        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
-        if (phone.length === 10) phone = '91' + phone;
+  .carousel-dots span.active {
+    background: #28251f;
+  }
 
-        const statusText = document.getElementById('customer-status');
-        const nameInput = document.getElementById('bill-name');
-        const areaInput = document.getElementById('bill-area');
 
-        if (mockCustomers[phone]) {
-            statusText.innerText = `✨ Returning Customer Verified!`;
-            nameInput.value = mockCustomers[phone].name;
-            areaInput.value = mockCustomers[phone].area;
-        } else {
-            statusText.innerText = phone.length > 5 ? "🆕 New Customer Profile" : "";
-        }
-    }
+  /* =========================================================
+     PORTFOLIO
+     ========================================================= */
 
-    function calculateTotal() {
-        let total = 0;
-        productCatalogue.forEach((prod, index) => {
-            const checkBox = document.getElementById(`prod-check-${index}`);
-            const qtyInput = document.getElementById(`prod-qty-${index}`);
-            
-            if (checkBox && checkBox.checked) {
-                let qty = parseInt(qtyInput.value) || 1;
-                if (qty < 1) qty = 1;
-                total += parseFloat(checkBox.getAttribute('data-price')) * qty;
-            }
-        });
-        document.getElementById('bill-total').innerText = `₹${total.toFixed(2)}`;
-        return total;
-    }
+  .portfolio-section {
+    padding-top: 18px;
+  }
 
-    function saveAndSendBill() {
-        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
-        const name = document.getElementById('bill-name').value.trim();
-        const total = calculateTotal();
+  .portfolio-track {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 0 10px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
 
-        if (!phone || !name || total === 0) return alert("Fill all customer data and select items.");
-        if (phone.length === 10) phone = '91' + phone;
+  .portfolio-track::-webkit-scrollbar {
+    display: none;
+  }
 
-        const billId = "BILL-" + Math.floor(100000 + Math.random() * 900000);
-        let itemsHistorySummary = [];
-        let txtMessageItems = "";
+  .portfolio-card {
+    flex: 0 0 calc((100vw - 27px) / 2);
+    height: 228px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #39485a;
+    scroll-snap-align: start;
+  }
 
-        productCatalogue.forEach((prod, index) => {
-            const checkBox = document.getElementById(`prod-check-${index}`);
-            const qtyInput = document.getElementById(`prod-qty-${index}`);
-            
-            if (checkBox && checkBox.checked) {
-                let qty = parseInt(qtyInput.value) || 1;
-                let itemPrice = parseFloat(checkBox.getAttribute('data-price'));
-                let computedItemTotal = itemPrice * qty;
-                
-                itemsHistorySummary.push(`${prod.name} (x${qty})`);
-                txtMessageItems += `\n- ${prod.name} x${qty} = ₹${computedItemTotal.toFixed(2)}`;
-            }
-        });
+  .portfolio-card img,
+  .portfolio-card video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
 
-        totalRevenue += total;
-        todaySales += total;
-        document.getElementById('dash-revenue').innerText = `₹${totalRevenue.toFixed(2)}`;
-        document.getElementById('dash-today-sales').innerText = `₹${todaySales.toFixed(2)}`;
+  .portfolio-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 55%,
+      rgba(0,0,0,.42)
+    );
+    pointer-events: none;
+  }
 
-        const tbody = document.getElementById('history-table-body');
-        if(tbody) {
-            tbody.innerHTML = `<tr><td><strong>${billId}</strong></td><td>${new Date().toLocaleTimeString()}</td><td>${name} (${phone})</td><td>${itemsHistorySummary.join(', ')}</td><td>₹${total.toFixed(2)}</td></tr>` + tbody.innerHTML;
-        }
+  .video-duration {
+    position: absolute;
+    top: 8px;
+    right: 7px;
+    z-index: 2;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgba(0,0,0,.45);
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 6px;
+  }
 
-        // Cleaned up WhatsApp receipt precisely as requested (No Bill IDs)
-        const msg = `Thank you for visiting!\n\nHere is the bill:${txtMessageItems}\n\nTotal Amt: ₹${total.toFixed(2)}`;
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+  .play-circle {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 50%;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+  }
 
-        // Clear workbench
-        document.getElementById('bill-phone').value = '';
-        document.getElementById('bill-name').value = '';
-        document.getElementById('bill-area').value = '';
-        productCatalogue.forEach((prod, index) => {
-            const checkBox = document.getElementById(`prod-check-${index}`);
-            const qtyInput = document.getElementById(`prod-qty-${index}`);
-            if(checkBox) checkBox.checked = false;
-            if(qtyInput) qtyInput.value = "1";
-        });
-        document.getElementById('bill-total').innerText = "₹0.00";
-    }
+  .portfolio-title {
+    position: absolute;
+    z-index: 3;
+    left: 8px;
+    bottom: 8px;
+    right: 8px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    line-height: 1.25;
+  }
 
-    function sendPromoWhatsApp() {
-        let phone = document.getElementById('bill-phone').value.trim().replace(/[^0-9]/g, '');
-        const name = document.getElementById('bill-name').value.trim();
-        if(!phone || !name) return alert("Provide client data first.");
-        if (phone.length === 10) phone = '91' + phone;
 
-        const msg = `Hi ${name}! Thank you for choosing us. Use your registered phone number ${phone} to get 10% off your next checkout!`;
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-   
+  /* =========================================================
+     PRICING
+     ========================================================= */
+
+  .pricing-section {
+    padding-top: 25px;
+  }
+
+  .pricing-track {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 0 10px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pricing-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .price-card {
+    flex: 0 0 100px;
+    min-height: 126px;
+    padding: 10px;
+    position: relative;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #f0ece3;
+    scroll-snap-align: start;
+  }
+
+  .price-card.popular {
+    border: 2px solid #d4b75e;
+  }
+
+  .popular-label {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background: #38362f;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 5px;
+  }
+
+  .price-card h3 {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 500;
+  }
+
+  .price {
+    margin-top: 3px;
+    margin-bottom: 9px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .price-card ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: Arial, sans-serif;
+    font-size: 6px;
+    line-height: 1.7;
+    color: #77736b;
+  }
+
+  .price-card li::before {
+    content: "• ";
+  }
+
+
+  /* =========================================================
+     TESTIMONIALS
+     ========================================================= */
+
+  .testimonials-section {
+    padding-top: 27px;
+    padding-bottom: 20px;
+  }
+
+  .testimonial {
+    margin: 0 10px 8px;
+    padding: 14px 12px;
+    min-height: 89px;
+    border-radius: 11px;
+    background: white;
+    border: 1px solid #f0ece3;
+  }
+
+  .quote {
+    margin-bottom: 7px;
+    color: #b59b4d;
+    font-size: 13px;
+  }
+
+  .testimonial p {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    line-height: 1.5;
+    color: #555149;
+  }
+
+  .testimonial-author {
+    margin-top: 7px;
+    font-family: Arial, sans-serif;
+    font-size: 6px;
+    color: #8d897f;
+  }
+
+  .stars {
+    color: #b59b4d;
+    letter-spacing: 1px;
+  }
+
+
+  /* =========================================================
+     HIRING
+     ========================================================= */
+
+  .hiring-section {
+    margin-top: 0;
+    padding: 18px 10px 25px;
+    background: #f2eadb;
+  }
+
+  .hiring-eyebrow {
+    margin-bottom: 3px;
+    font-family: Arial, sans-serif;
+    font-size: 6px;
+    letter-spacing: 1px;
+    color: #aaa193;
+  }
+
+  .hiring-section h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 500;
+  }
+
+  .hiring-description {
+    width: 230px;
+    margin: 5px 0 11px;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    line-height: 1.4;
+    color: #8c877d;
+  }
+
+  .job-card {
+    min-height: 43px;
+    margin-bottom: 6px;
+    padding: 8px 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    background: white;
+  }
+
+  .job-title {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 500;
+  }
+
+  .job-type {
+    margin-top: 2px;
+    font-family: Arial, sans-serif;
+    font-size: 6px;
+    color: #9a958b;
+  }
+
+  .apply-btn {
+    height: 23px;
+    padding: 0 10px;
+    border: 1px solid #7e7a72;
+    border-radius: 15px;
+    background: white;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+  }
+
+
+  /* =========================================================
+     HORIZONTAL SECTION INDICATORS
+     ========================================================= */
+
+  .horizontal-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 10px 0;
+  }
+
+  .horizontal-indicator::before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #d9d4c9;
+  }
+
+  .horizontal-indicator::after {
+    content: "›";
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #77736b;
+  }
+
+
+  /* =========================================================
+     HIDE DESKTOP ELEMENTS
+     ========================================================= */
+
+  .desktop-only,
+  .desktop-nav,
+  .desktop-menu {
+    display: none !important;
+  }
+
+
+  /* =========================================================
+     PREVENT OVERSIZED TEXT / IMAGES
+     ========================================================= */
+
+  img,
+  video {
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    overflow-wrap: normal;
+  }
+}
